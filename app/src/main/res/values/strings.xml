@@ -8,4 +8,37 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="recipe_results_text">Which recipe would you like to use?</string>
+    <string name="restaurant_results_text">Which restaurant would you like to goto?</string>
+    <string name="final_recipe_name">Recipe</string>
+    <string name="recipe_steps_header">Steps</string>
+    <string name="recipe_steps">FILLER</string>
+    <string name="cooktime_header">Cook time:</string>
+    <string name="cooktime">FILLER</string>
+    <string name="price_header">Price:</string>
+    <string name="price">FILLER</string>
+    <string name="favorite_prompt">Do you want to add this to Favorites?</string>
+    <string name="yes_radio">Yes</string>
+    <string name="no_radio">No</string>
+    <string name="time_to_eat">Time to eat!</string>
+    <string-array name="test_array">
+        <item> hello</item>
+        <item> hello</item>
+        <item> hello</item>
+        <item> hello</item>
+        <item> hello</item>
+        <item> hello</item>
+        <item> hello</item>
+        <item> hello</item>
+        <item> hello2</item>
+        <item> hello2</item>
+        <item> hello2</item>
+        <item> hello2</item>
+        <item> hello2</item>
+
+
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
