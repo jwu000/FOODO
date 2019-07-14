@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">FOODO</string>
+    <string name="username_textbox">Username</string>
+    <string name="password_textbox">Password</string>
+    <string name="login_button">Login</string>
+    <string name="create_account_text">Don\'t have an account? Sign up</string>
 </resources>
