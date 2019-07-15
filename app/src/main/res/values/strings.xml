@@ -11,10 +11,12 @@
     <string name="recipe_results_text">Which recipe would you like to use?</string>
     <string name="restaurant_results_text">Which restaurant would you like to goto?</string>
     <string name="final_recipe_name">Recipe</string>
+    <string name="final_restaurant_name">Restaurant</string>
     <string name="recipe_steps_header">Steps</string>
     <string name="recipe_steps">FILLER</string>
     <string name="cooktime_header">Cook time:</string>
     <string name="cooktime">FILLER</string>
+    <string name="time_header">Time:</string>
     <string name="price_header">Price:</string>
     <string name="price">FILLER</string>
     <string name="favorite_prompt">Do you want to add this to Favorites?</string>
