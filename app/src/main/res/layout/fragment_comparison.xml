@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Comparison">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="500dp">
+            <LinearLayout
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_weight="1"
+                    android:text="@string/final_recipe_name"
+                    android:textSize="18pt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_weight="1.5"
+                    android:text="@string/price_header"
+                    android:textSize="14pt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_weight="2"
+                    android:text="@string/time_header"
+                    android:textSize="14pt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:layout_weight="1"
+                        android:text="@string/final_restaurant_name"
+                        android:textSize="18pt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:layout_weight="1.5"
+                        android:text="@string/price_header"
+                        android:textSize="14pt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_weight="2"
+                        android:text="@string/time_header"
+                        android:textSize="14pt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+            </LinearLayout>
+
+        </LinearLayout>
+        <TextView
+            android:layout_gravity="center"
+            android:textSize="12pt"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="What would you like to do today?"/>
+
+        <RadioGroup
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14pt"
+                android:text="Cook"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14pt"
+                android:text="Eat Out"/>
+        </RadioGroup>
+    </LinearLayout>
+</FrameLayout>
