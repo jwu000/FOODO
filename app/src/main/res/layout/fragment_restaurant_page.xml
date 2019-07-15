@@ -7,8 +7,83 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/restaurant_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/restaurant"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:textStyle="bold"
+        android:textSize="24dp"/>
+
+    <ImageView
+        android:id="@+id/location"
+        android:layout_width="50dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/location" />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/address"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_marginTop="170dp"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/reviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reviews"
+        android:layout_marginTop="220dp"
+        android:layout_marginLeft="30dp"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+
+    <ListView
+        android:layout_width="350dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="30dp"
+        android:entries="@array/fake_list"
+        />
+
+    <TextView
+        android:id="@+id/restaurant_preference_query"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/restaurant_preference_query"
+        android:layout_marginTop="460dp"
+        android:layout_marginLeft="30dp"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+
+    <RadioGroup
+        android:id="@+id/restaurant_radio_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="500dp"
+        android:layout_marginLeft="30dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/restaurant_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/yes"
+            />
+        <RadioButton
+            android:id="@+id/restaurant_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no"
+            />
+    </RadioGroup>
+
 
 </FrameLayout>
