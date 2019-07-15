@@ -73,21 +73,24 @@
             android:layout_height="wrap_content"
             android:text="What would you like to do today?"/>
 
-        <RadioGroup
+        <LinearLayout
             android:layout_gravity="center"
-            android:layout_width="wrap_content"
             android:orientation="horizontal"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <RadioButton
+
+            <Button
+                android:text="Cook"
+                android:textSize="12pt"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14pt"
-                android:text="Cook"/>
-            <RadioButton
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:text="Eat Out"
+                android:textSize="12pt"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14pt"
-                android:text="Eat Out"/>
-        </RadioGroup>
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
     </LinearLayout>
 </FrameLayout>
