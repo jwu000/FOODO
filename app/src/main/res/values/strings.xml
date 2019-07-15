@@ -41,6 +41,36 @@
 
     </string-array>
 
+
+    <string name="search_query">What do you want to eat?</string>
+    <string name="search_recipe">Search Recipe</string>
+    <string name="recipe">Recipe 1</string>
+    <string name="steps">Steps:</string>
+    <string name="cook_time">Cook Time:</string>
+    <string name="recipe_price">Price:</string>
+    <string name="recipe_preference_query">Do you want to use this recipe?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="restaurant">Restaurant 1</string>
+    <string name="address">Address</string>
+    <string name="reviews">Reviews:</string>
+    <string name="restaurant_preference_query">Would you like to go to this restaurant?</string>
+    <string-array name="fake_list">
+        <item>Element1</item>
+        <item>Element2</item>
+        <item>Element3</item>
+        <item>Element4</item>
+        <item>Element5</item>
+        <item>Element6</item>
+        <item>Element7</item>
+        <item>Element8</item>
+        <item>Element9</item>
+        <item>Element10</item>
+    </string-array>
+    <string name="restaurant_name">Restaurant Name</string>
+    <string name="restaurant_favorite_query">Would you like to add it to your favorite?</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
