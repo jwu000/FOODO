@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
                     frag = new SearchRecipe();
                     break;
                 case R.id.navigation_favorite:
-                    
+
                     break;
                 case R.id.navigation_history:
 
