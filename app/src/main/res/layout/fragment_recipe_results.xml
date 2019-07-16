@@ -15,9 +15,10 @@
         android:layout_height="wrap_content"
         android:textSize="14pt"
         android:textColor="@android:color/black"
-        android:text="@string/restaurant_results_text" />
+        android:text="@string/recipe_results_text" />
 
     <ListView
+        android:id="@+id/recipe_results"
         android:layout_gravity="top|center"
         android:entries="@array/test_array"
         android:layout_marginTop="100dp"

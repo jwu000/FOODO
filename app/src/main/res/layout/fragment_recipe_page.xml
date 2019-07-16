@@ -69,24 +69,25 @@
         android:layout_marginLeft="30dp"
         />
 
-    <RadioGroup
-        android:id="@+id/recipe_radio_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="500dp"
-        android:orientation="horizontal">
-
-        <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
             android:id="@+id/recipe_yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/yes" />
-        <RadioButton
+            android:text="@string/yes"/>
+
+        <Button
             android:id="@+id/recipe_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no" />
-    </RadioGroup>
+            android:text="@string/no"/>
+
+    </LinearLayout>
+
 
 </FrameLayout>

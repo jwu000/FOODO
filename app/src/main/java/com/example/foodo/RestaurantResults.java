@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 
 /**
@@ -29,6 +31,7 @@ public class RestaurantResults extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    ListView restaurantResults;
 
     public RestaurantResults() {
         // Required empty public constructor
@@ -65,7 +68,19 @@ public class RestaurantResults extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_restaurant_results, container, false);
+        View v = inflater.inflate(R.layout.fragment_restaurant_results, container, false);
+        restaurantResults = v.findViewById(R.id.restaurant_results);
+        restaurantResults.setOnItemClickListener(new ListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Fragment nextFragment = new RestaurantPage();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, nextFragment)
+                        .addToBackStack(null) //allow us to go back kind of maybe
+                        .commit();
+            }
+        });
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
