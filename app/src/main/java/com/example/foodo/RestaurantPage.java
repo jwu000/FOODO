@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 /**
@@ -28,8 +29,11 @@ public class RestaurantPage extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    Button yes;
+    Button no;
 
     public RestaurantPage() {
+
         // Required empty public constructor
     }
 
@@ -64,7 +68,27 @@ public class RestaurantPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_restaurant_page, container, false);
+        View view = inflater.inflate(R.layout.fragment_restaurant_page, container, false);
+        yes = view.findViewById(R.id.restaurant_yes);
+        no = view.findViewById(R.id.restaurant_no);
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment nextFragment = new Comparison();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, nextFragment)
+                        .addToBackStack(null) //allow us to go back kind of maybe
+                        .commit();
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
