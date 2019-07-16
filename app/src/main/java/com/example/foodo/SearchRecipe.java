@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * to handle interaction events.
  * Use the {@link SearchRecipe#newInstance} factory method to
  * create an instance of this fragment.
  */
