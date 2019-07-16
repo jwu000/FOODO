@@ -80,12 +80,14 @@
             android:layout_height="wrap_content">
 
             <Button
+                android:id="@+id/choose_cook"
                 android:text="Cook"
                 android:textSize="12pt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <Button
+                android:id="@+id/choose_dine_out"
                 android:text="Eat Out"
                 android:textSize="12pt"
                 android:layout_width="wrap_content"

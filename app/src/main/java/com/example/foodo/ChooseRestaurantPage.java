@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 /**
@@ -29,7 +30,7 @@ public class ChooseRestaurantPage extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+    Button restaurant_time;
 
     public ChooseRestaurantPage() {
         // Required empty public constructor
@@ -66,31 +67,36 @@ public class ChooseRestaurantPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_choose_restaurant_page, container, false);
+        View view = inflater.inflate(R.layout.fragment_choose_restaurant_page, container, false);
+        restaurant_time = view.findViewById(R.id.restaurant_time);
+        restaurant_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment nextFragment = new SearchRecipe();
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, nextFragment)
+                        .addToBackStack(null) //allow us to go back kind of maybe
+                        .commit();
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+
     }
 
     /**
@@ -103,8 +109,5 @@ public class ChooseRestaurantPage extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+
 }

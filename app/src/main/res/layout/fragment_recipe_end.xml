@@ -80,6 +80,7 @@
     </RadioGroup>
 
     <Button
+        android:id="@+id/cook_time"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="20dp"
         android:text="@string/time_to_eat"
