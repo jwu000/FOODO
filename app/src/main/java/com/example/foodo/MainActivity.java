@@ -31,12 +31,13 @@ public class MainActivity extends AppCompatActivity {
                     frag = new SearchRecipe();
                     break;
                 case R.id.navigation_favorite:
-
+                    frag = new Favorites();
                     break;
                 case R.id.navigation_history:
-
+                    frag = new History();
                     break;
                 case R.id.navigation_settings:
+                    frag = new Settings();
                     break;
             }
             return loadFragment(frag);

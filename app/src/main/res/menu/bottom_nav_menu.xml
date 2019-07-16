@@ -4,17 +4,17 @@
     <item
         android:id="@+id/navigation_search"
         android:icon="@drawable/dine"
-        android:title="@string/title_home" />
+        android:title="Search" />
 
     <item
         android:id="@+id/navigation_favorite"
         android:icon="@drawable/favorite"
-        android:title="@string/title_dashboard" />
+        android:title="Favorites" />
 
     <item
         android:id="@+id/navigation_history"
         android:icon="@drawable/history"
-        android:title="@string/title_notifications" />
+        android:title="History" />
 
     <item
         android:id="@+id/navigation_settings"
