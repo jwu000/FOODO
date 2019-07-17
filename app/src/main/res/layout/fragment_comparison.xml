@@ -15,83 +15,103 @@
             android:layout_width="match_parent"
             android:layout_height="400dp">
             <LinearLayout
+                android:id="@+id/recipe_summary"
+                android:layout_marginTop="30dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:layout_width="0dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp">
                 <TextView
+                    android:id="@+id/final_recipe_name"
                     android:layout_weight="1"
                     android:text="@string/final_recipe_name"
-                    android:textSize="18pt"
+                    android:textSize="24sp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"/>
                 <TextView
+                    android:id="@+id/final_recipe_price"
                     android:layout_weight="1.5"
                     android:text="@string/price_header"
-                    android:textSize="14pt"
+                    android:textSize="20sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
+                    android:id="@+id/final_recipe_time"
                     android:layout_weight="2"
                     android:text="@string/time_header"
-                    android:textSize="14pt"
+                    android:textSize="20sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
             </LinearLayout>
             <LinearLayout
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent">
+                android:id="@+id/restaurant_summary"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp">
                     <TextView
+                        android:id="@+id/final_restaurant_name"
                         android:layout_weight="1"
                         android:text="@string/final_restaurant_name"
-                        android:textSize="18pt"
+                        android:textSize="24sp"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"/>
                     <TextView
+                        android:id="@+id/final_restaurant_price"
                         android:layout_weight="1.5"
                         android:text="@string/price_header"
-                        android:textSize="14pt"
+                        android:textSize="20sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
                     <TextView
+                        android:id="@+id/final_restaurant_time"
                         android:layout_weight="2"
                         android:text="@string/time_header"
-                        android:textSize="14pt"
+                        android:textSize="20sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
             </LinearLayout>
 
         </LinearLayout>
         <TextView
+            android:id="@+id/final_preference_query"
             android:layout_gravity="center"
-            android:textSize="12pt"
+            android:textSize="22sp"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="What would you like to do today?"/>
+            android:text="What would you like to do today?"
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:layout_gravity="center"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
 
             <Button
                 android:id="@+id/choose_cook"
                 android:text="Cook"
-                android:textSize="12pt"
+                android:textSize="20sp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_marginRight="30dp"/>
 
             <Button
                 android:id="@+id/choose_dine_out"
                 android:text="Eat Out"
-                android:textSize="12pt"
+                android:textSize="20sp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textStyle="bold"/>
         </LinearLayout>
 
     </LinearLayout>

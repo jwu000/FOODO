@@ -86,7 +86,7 @@ public class Comparison extends Fragment {
         dine_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment nextFragment = new ChooseRestaurantPage();
+                Fragment nextFragment = new RestaurantEnd();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe

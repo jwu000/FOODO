@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/recipe"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="30dp"
         android:textStyle="bold"/>
@@ -19,7 +19,7 @@
     <ScrollView
         android:id="@+id/scroll_recipe"
         android:layout_width="350dp"
-        android:layout_height="400dp"
+        android:layout_height="380dp"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="65dp">
 
@@ -34,16 +34,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/steps"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/cook_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="260dp"
+                android:layout_marginTop="200dp"
                 android:text="@string/cook_time"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="@string/recipe_price"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -63,29 +63,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/recipe_preference_query"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:layout_marginTop="470dp"
+        android:layout_marginTop="450dp"
         android:layout_marginLeft="30dp"
         />
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="490dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
         <Button
             android:id="@+id/recipe_yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/yes"/>
+            android:text="@string/yes"
+            android:textSize="20sp"
+            android:layout_marginRight="30dp"/>
 
         <Button
             android:id="@+id/recipe_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no"/>
+            android:text="@string/no"
+            android:textSize="20sp"/>
 
     </LinearLayout>
 

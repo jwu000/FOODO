@@ -7,46 +7,51 @@
 
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/recipe_name"
         android:layout_gravity="top|center"
-        android:layout_marginTop="10dp"
-        android:textSize="16pt"
+        android:layout_marginTop="20dp"
+        android:textSize="24sp"
         android:textColor="@android:color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/final_recipe_name" />
+        android:text="@string/final_recipe_name"
+        android:textStyle="bold" />
 
     <ScrollView
         android:layout_gravity="top|center"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="360dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginLeft="30dp">
             <TextView
+                android:id="@+id/steps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14pt"
+                android:textSize="20sp"
                 android:text="@string/recipe_steps_header"/>
             <TextView
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:text="@string/recipe_steps"
-                android:textSize="12pt"
+                android:textSize="25sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:layout_marginTop="20dp"
+                android:id="@+id/recipe_cook_time"
+                android:layout_marginTop="50dp"
                 android:text="@string/cooktime_header"
-                android:textSize="14pt"
+                android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <TextView
-                android:layout_marginTop="20dp"
-                android:textSize="14pt"
+                android:id="@+id/recipe_price"
+                android:layout_marginTop="30dp"
+                android:textSize="20sp"
                 android:text="@string/price_header"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -54,28 +59,30 @@
     </ScrollView>
 
     <TextView
-        android:layout_marginTop="420dp"
-        android:textSize="14pt"
+        android:id="@+id/recipe_favorite_query"
+        android:layout_marginTop="360dp"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:text="@string/favorite_prompt"
         android:layout_gravity="center|top"
         android:layout_width="350dp"
         android:layout_height="wrap_content" />
 
     <RadioGroup
-        android:layout_marginTop="500dp"
-        android:layout_gravity="center|top"
+        android:layout_marginTop="435dp"
+        android:layout_marginLeft="30dp"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <RadioButton
             android:text="@string/yes_radio"
-            android:textSize="12pt"
+            android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <RadioButton
             android:text="@string/no_radio"
-            android:textSize="12pt"
+            android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RadioGroup>
@@ -83,9 +90,10 @@
     <Button
         android:id="@+id/cook_time"
         android:layout_gravity="top|center"
-        android:layout_marginTop="540dp"
+        android:layout_marginTop="480dp"
         android:text="@string/time_to_eat"
-        android:textSize="14pt"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </FrameLayout>

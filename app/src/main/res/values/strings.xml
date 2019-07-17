@@ -69,8 +69,15 @@
     </string-array>
     <string name="restaurant_name">Restaurant Name</string>
     <string name="restaurant_favorite_query">Would you like to add it to your favorite?</string>
-
-
+    <string name="favorite">Favorite</string>
+    <string name="history">History</string>
+    <string name="settings">Settings</string>
+    <string name="create_new_account">Create New Account</string>
+    <string name="email">Enter Email Address</string>
+    <string name="username">Enter Username</string>
+    <string name="password">Enter Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="or">Or</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

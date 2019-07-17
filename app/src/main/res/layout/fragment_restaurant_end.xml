@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChooseRestaurantPage">
+    tools:context=".RestaurantEnd">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
@@ -13,7 +13,7 @@
         android:text="@string/restaurant_name"
         android:layout_marginTop="30dp"
         android:textStyle="bold"
-        android:textSize="24dp"
+        android:textSize="24sp"
         android:layout_marginLeft="30dp"/>
 
     <com.google.android.gms.maps.MapView
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:text="@string/restaurant_favorite_query"
         android:textStyle="bold"
-        android:textSize="20dp"
+        android:textSize="22sp"
         android:layout_marginTop="350dp"
         android:layout_marginLeft="30dp"/>
 
@@ -39,19 +39,21 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="400dp">
+        android:layout_marginTop="420dp">
 
         <RadioButton
             android:id="@+id/restaurant_favorite_yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/yes"/>
+            android:text="@string/yes"
+            android:textSize="20sp"/>
 
         <RadioButton
             android:id="@+id/restaurant_favorite_no"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no"/>
+            android:text="@string/no"
+            android:textSize="20sp"/>
     </RadioGroup>
 
     <Button
@@ -59,9 +61,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/time_to_eat"
-        android:textSize="18dp"
+        android:textSize="22sp"
         android:textStyle="bold"
-        android:layout_marginTop="450dp"
-        android:layout_marginLeft="30dp"/>
+        android:layout_marginTop="480dp"
+        android:layout_gravity="center_horizontal"/>
 
 </FrameLayout>
