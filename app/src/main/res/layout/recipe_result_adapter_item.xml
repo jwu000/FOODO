@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/recipe_name"
+        android:text="Recipe"
+        android:layout_width="250dp"
+        android:layout_height="70dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="120dp"
+        android:layout_height="70dp">
+
+        <TextView
+            android:id="@+id/total_recipe_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Cost:"/>
+
+        <TextView
+            android:id="@+id/number_of_ingredients"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="# of Ingredients:"/>
+        <TextView
+            android:id="@+id/recipe_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time needed:"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>
