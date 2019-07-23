@@ -6,21 +6,30 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RecipeResults.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RecipeResults#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+
 public class RecipeResults extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,6 +79,45 @@ public class RecipeResults extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_recipe_results, container, false);
         recipeResults = v.findViewById(R.id.recipe_results);
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=10&offset=0&limitLicense=false&instructionsRequired=true&query=ramen\"";
+
+
+
+
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String test;
+                try{
+                    test = response.getJSONArray("results").toString();
+                    Log.d("request", test);
+                } catch(Exception e){
+                    Log.d("JSON ERROR" , e.toString());
+                };
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("resquestFAIL", "NOOOO");
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap headers = new HashMap();
+                headers.put("X-RapidAPI-Host",getString(R.string.api_host));
+                headers.put("X-RapidAPI-Key", getString(R.string.api_key));
+                return headers;
+            }
+
+
+        };
+
+        queue.add(jsonRequest);
+
+
         recipeResults.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
