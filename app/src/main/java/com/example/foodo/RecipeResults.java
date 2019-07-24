@@ -161,16 +161,83 @@ public class RecipeResults extends Fragment {
         }
         Log.d("recipeId", recipeIds.toString());
 
-        //String recipeeIds = String.join(',', recipeIds);
+        StringBuilder builder = new StringBuilder();
+        for (Integer recipeId: recipeIds){
+            builder.append(recipeId.toString());
+            builder.append("%2C");
+        }
+        builder.deleteCharAt(builder.length() -1);
+        Log.d("the stringurl", builder.toString());
+        String recipeIdsSeperatedByComma = builder.toString();
+        String urlBulk = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/informationBulk?ids=%s",recipeIdsSeperatedByComma);
+        Log.d("the request", urlBulk);
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlBulk, null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                for (int index =0 ; index < response.length(); index++) {
+                    try {
+                        JSONObject recipe = (JSONObject)response.get(index);
+                        int numberServings = recipe.getInt("servings");
+                        String recipeName = recipe.getString("title");
+                        JSONArray ingredidents = recipe.getJSONArray("extendedIngredients");
+                        int numIngredidents = ingredidents.length();
+                        double pricePerServing = recipe.getDouble("pricePerServing") / 100.0;
+                        double totalPrice = numberServings * pricePerServing;
+                        URI image = new URI(recipe.getString("image"));
+                        JSONArray instructions = recipe.getJSONArray("analyzedInstructions").getJSONObject(0).getJSONArray("steps");
+                        int timeNeeded = recipe.getInt("readyInMinutes");
+                        RecipeResultAdapterItem recipeItem = new RecipeResultAdapterItem(recipeName,
+                                totalPrice,pricePerServing,numIngredidents,timeNeeded,numberServings,image,instructions,ingredidents);
+                        listOfRecipeResults.add(recipeItem);
+                    }
+                    catch(Exception e ) {
+                        Log.d("ada",e.getMessage());
+                    }
 
+
+                };
+
+                AdapterRecipeResults myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
+                recipeResults.setAdapter(myAdapter);
+
+                recipeResults.setOnItemClickListener(new ListView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Fragment nextFragment = new RecipePage();
+                        getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container, nextFragment)
+                                .addToBackStack(null) //allow us to go back kind of maybe
+                                .commit();
+                    }
+                });
+
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error",error.getMessage());
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap headers = new HashMap();
+                headers.put("X-RapidAPI-Host",getString(R.string.api_host));
+                headers.put("X-RapidAPI-Key", getString(R.string.api_key));
+                return headers;
+            }
+        };
+
+        queue.add(jsonArrayRequest);
+/*
         for (final Integer recipeId : recipeIds) {
 
             String url = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/%s/information", recipeId);
+            String url = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/informationBulk?ids=%s",recipeIdsSeperatedByComma);
             Log.d("theRequestString", url);
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    String test;
                     try{
                         int numberServings = response.getInt("servings");
                         String recipeName = response.getString("title");
@@ -216,7 +283,7 @@ public class RecipeResults extends Fragment {
 
             queue.add(jsonRequest);
         }
-
+*/
 
 
     }
