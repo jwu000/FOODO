@@ -24,8 +24,11 @@ import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +44,8 @@ public class RecipeResults extends Fragment {
     private String mParam2;
     ListView recipeResults;
 
+    ArrayList<RecipeResultAdapterItem> listOfRecipeResults = new ArrayList<RecipeResultAdapterItem>();
+    RequestQueue queue;
 
     public RecipeResults() {
         // Required empty public constructor
@@ -79,9 +84,9 @@ public class RecipeResults extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_recipe_results, container, false);
         recipeResults = v.findViewById(R.id.recipe_results);
+        queue = Volley.newRequestQueue(getActivity());
 
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=10&offset=0&limitLicense=false&instructionsRequired=true&query=ramen\"";
+        String url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=5&offset=0&limitLicense=false&instructionsRequired=true&query=ramen\"";
 
 
 
@@ -91,8 +96,9 @@ public class RecipeResults extends Fragment {
             public void onResponse(JSONObject response) {
                 String test;
                 try{
+                    populateResultsList(response.getJSONArray("results"));
                     test = response.getJSONArray("results").toString();
-                    Log.d("request", test);
+
                 } catch(Exception e){
                     Log.d("JSON ERROR" , e.toString());
                 };
@@ -132,32 +138,77 @@ public class RecipeResults extends Fragment {
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void populateResultsList(JSONArray results) {
+        ArrayList<Integer> recipeIds = new ArrayList<Integer>();
+        for (int index = 0; index < results.length(); index++) {
+            JSONObject recipe;
+            try{
+                recipe = results.getJSONObject(index);
+                Log.d("theRecipe", recipe.toString());
+                recipeIds.add(recipe.getInt("id"));
+            }
+            catch (Exception e){
+                Log.d("json exception" , e.toString());
+
+            }
+
+
+        }
+        Log.d("recipeId", recipeIds.toString());
+
+        for (final Integer recipeId : recipeIds) {
+
+            String url = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/%s/information", recipeId);
+            Log.d("theRequestString", url);
+            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    String test;
+                    try{
+                        int numberServings = response.getInt("servings");
+                        String recipeName = response.getString("title");
+                        JSONArray ingredidents = response.getJSONArray("extendedIngredients");
+                        int numIngredidents = ingredidents.length();
+                        double pricePerServing = response.getDouble("pricePerServing") / 100.0;
+                        double totalPrice = numberServings * pricePerServing;
+                        URI image = new URI(response.getString("image"));
+                        JSONArray instructions = response.getJSONArray("analyzedInstructions").getJSONObject(0).getJSONArray("steps");
+                        int timeNeeded = response.getInt("readyInMinutes");
+
+                        Log.d("recipe " + recipeId.toString(), recipeName);
+                        Log.d("recipe " + recipeId.toString(), Integer.toString(numIngredidents));
+                        Log.d("recipe " + recipeId.toString(), Double.toString(pricePerServing));
+                        Log.d("recipe " + recipeId.toString(), Double.toString(totalPrice));
+                        Log.d("recipe " + recipeId.toString(), Integer.toString(timeNeeded));
+                    } catch(Exception e){
+                        Log.d("JSON ERROR" , e.toString());
+                    };
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("resquestFAILPopulating", error.getMessage());
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap headers = new HashMap();
+                    headers.put("X-RapidAPI-Host",getString(R.string.api_host));
+                    headers.put("X-RapidAPI-Key", getString(R.string.api_key));
+                    return headers;
+                }
+
+
+            };
+
+            queue.add(jsonRequest);
+        }
+
+
 
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
 }

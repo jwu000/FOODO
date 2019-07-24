@@ -4,6 +4,15 @@ import java.net.URI;
 
 public class RecipeResultAdapterItem {
 
+    public String getRecipeName() {
+        return recipeName;
+    }
+
+    public void setRecipeName(String recipeName) {
+        this.recipeName = recipeName;
+    }
+
+    String recipeName;
     float totalPrice;
     float pricePerServing;
     int numberOfIngridents;
@@ -13,12 +22,13 @@ public class RecipeResultAdapterItem {
     String[] instructions;
     String[] ingridents;
 
-    public RecipeResultAdapterItem(float totalPrice, float pricePerServing, int numberOfIngridents, int timeNeeded, int servins, URI recipeImage, String[] instructions, String[] ingridents) {
+    public RecipeResultAdapterItem(String recipeName, float totalPrice, float pricePerServing, int numberOfIngridents, int timeNeeded, int servings, URI recipeImage, String[] instructions, String[] ingridents) {
+        this.recipeName = recipeName;
         this.totalPrice = totalPrice;
         this.pricePerServing = pricePerServing;
         this.numberOfIngridents = numberOfIngridents;
         this.timeNeeded = timeNeeded;
-        this.servings = servins;
+        this.servings = servings;
         this.recipeImage = recipeImage;
         this.instructions = instructions;
         this.ingridents = ingridents;
@@ -41,7 +51,7 @@ public class RecipeResultAdapterItem {
         return timeNeeded;
     }
 
-    public int getServins() {
+    public int getServings() {
         return servings;
     }
 
@@ -75,8 +85,8 @@ public class RecipeResultAdapterItem {
         this.timeNeeded = timeNeeded;
     }
 
-    public void setServins(int servins) {
-        this.servings = servins;
+    public void setServings(int servings) {
+        this.servings = servings;
     }
 
     public void setRecipeImage(URI recipeImage) {
