@@ -1,5 +1,7 @@
 package com.example.foodo;
 
+import org.json.JSONArray;
+
 import java.net.URI;
 
 public class RecipeResultAdapterItem {
@@ -13,16 +15,16 @@ public class RecipeResultAdapterItem {
     }
 
     String recipeName;
-    float totalPrice;
-    float pricePerServing;
+    double totalPrice;
+    double pricePerServing;
     int numberOfIngridents;
     int timeNeeded;
     int servings;
     URI recipeImage;
-    String[] instructions;
-    String[] ingridents;
+    JSONArray instructions;
+    JSONArray ingridents;
 
-    public RecipeResultAdapterItem(String recipeName, float totalPrice, float pricePerServing, int numberOfIngridents, int timeNeeded, int servings, URI recipeImage, String[] instructions, String[] ingridents) {
+    public RecipeResultAdapterItem(String recipeName, double totalPrice, double pricePerServing, int numberOfIngridents, int timeNeeded, int servings, URI recipeImage, JSONArray instructions, JSONArray ingridents) {
         this.recipeName = recipeName;
         this.totalPrice = totalPrice;
         this.pricePerServing = pricePerServing;
@@ -35,11 +37,11 @@ public class RecipeResultAdapterItem {
     }
 
 
-    public float getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public float getPricePerServing() {
+    public double getPricePerServing() {
         return pricePerServing;
     }
 
@@ -59,21 +61,21 @@ public class RecipeResultAdapterItem {
         return recipeImage;
     }
 
-    public String[] getInstructions() {
+    public JSONArray getInstructions() {
         return instructions;
     }
 
-    public String[] getIngridents() {
+    public JSONArray getIngridents() {
         return ingridents;
     }
 
 
 
-    public void setTotalPrice(float totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public void setPricePerServing(float pricePerServing) {
+    public void setPricePerServing(double pricePerServing) {
         this.pricePerServing = pricePerServing;
     }
 
@@ -93,11 +95,11 @@ public class RecipeResultAdapterItem {
         this.recipeImage = recipeImage;
     }
 
-    public void setInstructions(String[] instructions) {
+    public void setInstructions(JSONArray instructions) {
         this.instructions = instructions;
     }
 
-    public void setIngridents(String[] ingridents) {
+    public void setIngridents(JSONArray ingridents) {
         this.ingridents = ingridents;
     }
 

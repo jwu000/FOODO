@@ -44,7 +44,7 @@ public class RecipeResults extends Fragment {
     private String mParam2;
     ListView recipeResults;
 
-    ArrayList<RecipeResultAdapterItem> listOfRecipeResults = new ArrayList<RecipeResultAdapterItem>();
+    ArrayList<RecipeResultAdapterItem> listOfRecipeResults = new ArrayList<>();
     RequestQueue queue;
 
     public RecipeResults() {
@@ -86,7 +86,7 @@ public class RecipeResults extends Fragment {
         recipeResults = v.findViewById(R.id.recipe_results);
         queue = Volley.newRequestQueue(getActivity());
 
-        String url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=5&offset=0&limitLicense=false&instructionsRequired=true&query=ramen\"";
+        String url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=3&offset=0&limitLicense=false&instructionsRequired=true&query=ramen\"";
 
 
 
@@ -94,20 +94,21 @@ public class RecipeResults extends Fragment {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                String test;
+
                 try{
-                    populateResultsList(response.getJSONArray("results"));
-                    test = response.getJSONArray("results").toString();
+                    populateResultsList(response.getJSONArray("results"), recipeResults);
+
+
 
                 } catch(Exception e){
-                    Log.d("JSON ERROR" , e.toString());
+                    Log.d("JSON ERROR" , e.getMessage());
                 };
 
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("resquestFAIL", "NOOOO");
+                Log.d("resquestFAIL", error.getMessage());
             }
         }) {
             @Override
@@ -124,6 +125,10 @@ public class RecipeResults extends Fragment {
         queue.add(jsonRequest);
 
 
+
+        AdapterRecipeResults myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
+        recipeResults.setAdapter(myAdapter);
+
         recipeResults.setOnItemClickListener(new ListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -138,8 +143,8 @@ public class RecipeResults extends Fragment {
         return v;
     }
 
-    public void populateResultsList(JSONArray results) {
-        ArrayList<Integer> recipeIds = new ArrayList<Integer>();
+    public void populateResultsList(JSONArray results, ListView listView) {
+        ArrayList<Integer> recipeIds = new ArrayList<>();
         for (int index = 0; index < results.length(); index++) {
             JSONObject recipe;
             try{
@@ -155,6 +160,8 @@ public class RecipeResults extends Fragment {
 
         }
         Log.d("recipeId", recipeIds.toString());
+
+        //String recipeeIds = String.join(',', recipeIds);
 
         for (final Integer recipeId : recipeIds) {
 
@@ -180,6 +187,11 @@ public class RecipeResults extends Fragment {
                         Log.d("recipe " + recipeId.toString(), Double.toString(pricePerServing));
                         Log.d("recipe " + recipeId.toString(), Double.toString(totalPrice));
                         Log.d("recipe " + recipeId.toString(), Integer.toString(timeNeeded));
+
+                        RecipeResultAdapterItem recipeItem = new RecipeResultAdapterItem(recipeName,
+                                totalPrice,pricePerServing,numIngredidents,timeNeeded,numberServings,image,instructions,ingredidents);
+                        listOfRecipeResults.add(recipeItem);
+
                     } catch(Exception e){
                         Log.d("JSON ERROR" , e.toString());
                     };

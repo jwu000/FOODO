@@ -16,10 +16,10 @@
         android:layout_height="70dp">
 
         <TextView
-            android:id="@+id/total_recipe_cost"
+            android:id="@+id/cost_per_serving"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total Cost:"/>
+            android:text="Cost per saving: "/>
 
         <TextView
             android:id="@+id/number_of_ingredients"
