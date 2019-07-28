@@ -17,6 +17,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -86,59 +87,66 @@ public class RecipeResults extends Fragment {
         recipeResults = v.findViewById(R.id.recipe_results);
         queue = Volley.newRequestQueue(getActivity());
 
-        String url = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=3&offset=0&limitLicense=false&instructionsRequired=true&query=ramen\"";
+        Bundle query = getArguments();
+
+        String url = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=10&offset=0&limitLicense=false&instructionsRequired=true&query=%s", query.get("query"));
+
+        if (listOfRecipeResults.size() == 0) {
+            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+
+                    try{
+                        populateResultsList(response.getJSONArray("results"), recipeResults);
+
+
+
+                    } catch(Exception e){
+                        Log.d("JSON ERROR" , e.getMessage());
+                    };
+
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("resquestFAIL", error.getMessage());
+                }
+            }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap headers = new HashMap();
+                    headers.put("X-RapidAPI-Host",getString(R.string.api_host));
+                    headers.put("X-RapidAPI-Key", getString(R.string.api_key));
+                    return headers;
+                }
+
+
+            };
+
+            queue.add(jsonRequest);
+        }
 
 
 
 
-        JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
 
-                try{
-                    populateResultsList(response.getJSONArray("results"), recipeResults);
+        else{
 
+            AdapterRecipeResults myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
+            recipeResults.setAdapter(myAdapter);
 
-
-                } catch(Exception e){
-                    Log.d("JSON ERROR" , e.getMessage());
-                };
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("resquestFAIL", error.getMessage());
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap headers = new HashMap();
-                headers.put("X-RapidAPI-Host",getString(R.string.api_host));
-                headers.put("X-RapidAPI-Key", getString(R.string.api_key));
-                return headers;
-            }
-
-
-        };
-
-        queue.add(jsonRequest);
-
-
-
-        AdapterRecipeResults myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
-        recipeResults.setAdapter(myAdapter);
-
-        recipeResults.setOnItemClickListener(new ListView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Fragment nextFragment = new RecipePage();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, nextFragment)
-                        .addToBackStack(null) //allow us to go back kind of maybe
-                        .commit();
-            }
-        });
+            recipeResults.setOnItemClickListener(new ListView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Fragment nextFragment = new RecipePage();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, nextFragment)
+                            .addToBackStack(null) //allow us to go back kind of maybe
+                            .commit();
+                    CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                }
+            });
+        }
 
         return v;
     }
@@ -208,6 +216,7 @@ public class RecipeResults extends Fragment {
                                 .replace(R.id.fragment_container, nextFragment)
                                 .addToBackStack(null) //allow us to go back kind of maybe
                                 .commit();
+                        CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
                     }
                 });
 
@@ -216,7 +225,7 @@ public class RecipeResults extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("error",error.getMessage());
+                Log.d("error",error.toString());
             }
         }) {
             @Override
@@ -228,62 +237,25 @@ public class RecipeResults extends Fragment {
             }
         };
 
+        jsonArrayRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 500000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 500000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+                Log.d("volley timeout", error.toString());
+            }
+        });
+
         queue.add(jsonArrayRequest);
-/*
-        for (final Integer recipeId : recipeIds) {
 
-            String url = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/%s/information", recipeId);
-            String url = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/informationBulk?ids=%s",recipeIdsSeperatedByComma);
-            Log.d("theRequestString", url);
-            JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try{
-                        int numberServings = response.getInt("servings");
-                        String recipeName = response.getString("title");
-                        JSONArray ingredidents = response.getJSONArray("extendedIngredients");
-                        int numIngredidents = ingredidents.length();
-                        double pricePerServing = response.getDouble("pricePerServing") / 100.0;
-                        double totalPrice = numberServings * pricePerServing;
-                        URI image = new URI(response.getString("image"));
-                        JSONArray instructions = response.getJSONArray("analyzedInstructions").getJSONObject(0).getJSONArray("steps");
-                        int timeNeeded = response.getInt("readyInMinutes");
-
-                        Log.d("recipe " + recipeId.toString(), recipeName);
-                        Log.d("recipe " + recipeId.toString(), Integer.toString(numIngredidents));
-                        Log.d("recipe " + recipeId.toString(), Double.toString(pricePerServing));
-                        Log.d("recipe " + recipeId.toString(), Double.toString(totalPrice));
-                        Log.d("recipe " + recipeId.toString(), Integer.toString(timeNeeded));
-
-                        RecipeResultAdapterItem recipeItem = new RecipeResultAdapterItem(recipeName,
-                                totalPrice,pricePerServing,numIngredidents,timeNeeded,numberServings,image,instructions,ingredidents);
-                        listOfRecipeResults.add(recipeItem);
-
-                    } catch(Exception e){
-                        Log.d("JSON ERROR" , e.toString());
-                    };
-
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.d("resquestFAILPopulating", error.getMessage());
-                }
-            }) {
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    HashMap headers = new HashMap();
-                    headers.put("X-RapidAPI-Host",getString(R.string.api_host));
-                    headers.put("X-RapidAPI-Key", getString(R.string.api_key));
-                    return headers;
-                }
-
-
-            };
-
-            queue.add(jsonRequest);
-        }
-*/
 
 
     }

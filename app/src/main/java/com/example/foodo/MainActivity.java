@@ -28,7 +28,13 @@ public class MainActivity extends AppCompatActivity {
             Fragment frag = null;
             switch (item.getItemId()) {
                 case R.id.navigation_search:
-                    frag = new SearchRecipe();
+                    if (CurrentFragmentsSingleton.getInstance().searchState == null){
+                        frag = new SearchRecipe();
+                        CurrentFragmentsSingleton.getInstance().searchState = frag;
+                    }
+                    else {
+                        frag = CurrentFragmentsSingleton.getInstance().searchState;
+                    }
                     break;
                 case R.id.navigation_favorite:
                     frag = new Favorites();

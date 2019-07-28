@@ -18,9 +18,8 @@
     <ListView
         android:id="@+id/recipe_results"
         android:layout_gravity="top|center"
-        android:entries="@array/test_array"
         android:layout_marginTop="100dp"
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="600dp">
 
     </ListView>
