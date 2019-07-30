@@ -87,6 +87,7 @@ public class RestaurantResults extends Fragment {
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
+                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
             }
         });
         return v;

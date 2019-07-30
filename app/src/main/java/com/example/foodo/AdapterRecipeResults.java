@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class AdapterRecipeResults  extends BaseAdapter {
@@ -44,7 +45,8 @@ public class AdapterRecipeResults  extends BaseAdapter {
 
             viewHolder = new ViewHolder();
             viewHolder.recipeName = view.findViewById(R.id.recipe_name);
-            viewHolder.costPerServing =view.findViewById(R.id.cost_per_serving);
+            viewHolder.totalCost = view.findViewById(R.id.total_cost);
+            viewHolder.numServings= view.findViewById(R.id.number_of_servings);
             viewHolder.numIngredients = view.findViewById(R.id.number_of_ingredients);
             viewHolder.recipeTime = view.findViewById(R.id.recipe_time);
 
@@ -56,9 +58,10 @@ public class AdapterRecipeResults  extends BaseAdapter {
 
         Log.d("doing listview stuff", "JAWD");
         viewHolder.recipeName.setText(recipes.get(i).getRecipeName());
-        viewHolder.costPerServing.setText("Cost Per Serving: " + recipes.get(i).getPricePerServing());
-        viewHolder.numIngredients.setText("# Ingredients: " + recipes.get(i).getNumberOfIngridents());
-        viewHolder.recipeTime.setText("Total Time: " + recipes.get(i).getTimeNeeded());
+        viewHolder.totalCost.setText(new DecimalFormat("#.##").format(recipes.get(i).getTotalPrice()));
+        viewHolder.numServings.setText(""+recipes.get(i).getServings());
+        viewHolder.numIngredients.setText(""+recipes.get(i).getNumberOfIngridents());
+        viewHolder.recipeTime.setText(""+recipes.get(i).getTimeNeeded());
 
 
 
@@ -67,8 +70,9 @@ public class AdapterRecipeResults  extends BaseAdapter {
 
     static class ViewHolder {
         TextView recipeName;
-        TextView costPerServing;
+        TextView totalCost;
         TextView numIngredients;
         TextView recipeTime;
+        TextView numServings;
     }
 }
