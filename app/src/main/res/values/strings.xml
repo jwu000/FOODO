@@ -41,7 +41,7 @@
 
     </string-array>
 
-
+    <string name="cookware">Cookware:</string>
     <string name="search_query">What do you want to eat?</string>
     <string name="search_recipe">Search Recipe</string>
     <string name="recipe">Recipe 1</string>
