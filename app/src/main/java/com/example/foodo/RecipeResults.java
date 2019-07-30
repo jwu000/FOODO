@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URI;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -139,6 +140,16 @@ public class RecipeResults extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Fragment nextFragment = new RecipePage();
+                    Bundle recipeInfo = new Bundle();
+                    RecipeResultAdapterItem theRecipe = listOfRecipeResults.get(i);
+                    recipeInfo.putString("recipe_name", theRecipe.getRecipeName());
+                    recipeInfo.putInt("cookTime", theRecipe.getTimeNeeded());
+                    recipeInfo.putString("totalPrice", new DecimalFormat("#.##").format(theRecipe.getTotalPrice()));
+                    recipeInfo.putInt("numServings", theRecipe.getServings());
+                    recipeInfo.putString("pricePerServing", new DecimalFormat("#.##").format(theRecipe.getPricePerServing()));
+                    recipeInfo.putString("instructions", parseInstructions(theRecipe.getInstructions()));
+                    recipeInfo.putString("ingredients", parseIngridents(theRecipe.getIngridents()));
+                    nextFragment.setArguments(recipeInfo);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, nextFragment)
                             .addToBackStack(null) //allow us to go back kind of maybe
@@ -149,6 +160,39 @@ public class RecipeResults extends Fragment {
         }
 
         return v;
+    }
+
+    private String parseInstructions(JSONArray instructions) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Steps: \n");
+        for (int index=0; index < instructions.length(); index++){
+            try{
+                JSONObject step = instructions.getJSONObject(index);
+                builder.append(step.get("number")+". " + step.get("step") + "\n\n");
+            }
+            catch (Exception e){
+                Log.d("error", e.toString());
+            }
+        }
+
+        return builder.toString();
+
+    }
+
+    private String parseIngridents(JSONArray ingridents) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Ingredients: \n");
+        for (int index=0; index < ingridents.length(); index++){
+            try{
+                builder.append("- " +ingridents.getJSONObject(index).get("original") + "\n");
+            }
+            catch (Exception e) {
+                Log.d("error", e.toString());
+            }
+
+        }
+
+        return builder.toString();
     }
 
     public void populateResultsList(JSONArray results, ListView listView) {
@@ -212,6 +256,16 @@ public class RecipeResults extends Fragment {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Fragment nextFragment = new RecipePage();
+                        Bundle recipeInfo = new Bundle();
+                        RecipeResultAdapterItem theRecipe = listOfRecipeResults.get(i);
+                        recipeInfo.putString("recipe_name", theRecipe.getRecipeName());
+                        recipeInfo.putInt("cookTime", theRecipe.getTimeNeeded());
+                        recipeInfo.putString("totalPrice", new DecimalFormat("#.##").format(theRecipe.getTotalPrice()));
+                        recipeInfo.putInt("numServings", theRecipe.getServings());
+                        recipeInfo.putString("pricePerServing", new DecimalFormat("#.##").format(theRecipe.getPricePerServing()));
+                        recipeInfo.putString("instructions", parseInstructions(theRecipe.getInstructions()));
+                        recipeInfo.putString("ingredients", parseIngridents(theRecipe.getIngridents()));
+                        nextFragment.setArguments(recipeInfo);
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragment_container, nextFragment)
                                 .addToBackStack(null) //allow us to go back kind of maybe
