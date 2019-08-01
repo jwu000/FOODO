@@ -1,4 +1,4 @@
-package com.example.foodo;
+package util;
 
 import org.json.JSONArray;
 

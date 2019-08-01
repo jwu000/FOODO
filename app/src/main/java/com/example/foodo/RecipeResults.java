@@ -33,6 +33,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import util.AdapterRecipeResults;
+import util.RecipeResultAdapterItem;
 
 
 public class RecipeResults extends Fragment {
@@ -90,7 +92,9 @@ public class RecipeResults extends Fragment {
 
         Bundle query = getArguments();
 
-        String url = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=10&offset=0&limitLicense=false&instructionsRequired=true&query=%s", query.get("query"));
+        String searchTerm = CurrentFragmentsSingleton.getInstance().searchTerm;
+
+        String url = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=10&offset=0&limitLicense=false&instructionsRequired=true&query=%s", searchTerm);
 
         if (listOfRecipeResults.size() == 0) {
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {

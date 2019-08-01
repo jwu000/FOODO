@@ -1,9 +1,15 @@
 package com.example.foodo;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -26,8 +32,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URI;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import util.AdapterRestaurantResults;
+import util.RestaurantResultAdapterItem;
 
 
 /**
@@ -36,7 +47,10 @@ import java.util.Map;
 public class RestaurantResults extends Fragment {
 
     ListView restaurantResults;
-
+    double longitude = -71.104353;
+    double latitude = 42.326707;
+    RequestQueue requestQueue;
+    ArrayList<RestaurantResultAdapterItem> listOfRestaurants = new ArrayList<>();
 
     public RestaurantResults() {
         // Required empty public constructor
@@ -48,49 +62,107 @@ public class RestaurantResults extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_restaurant_results, container, false);
+        final View v = inflater.inflate(R.layout.fragment_restaurant_results, container, false);
 
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue = Volley.newRequestQueue(getActivity());
 
-        String url = "https://api.yelp.com/v3/businesses/search";
+        String searchTerm = CurrentFragmentsSingleton.getInstance().searchTerm;
 
-        JsonObjectRequest objectRequest = new JsonObjectRequest(
-                Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("response", response.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("resquestFAIL", error.toString());
-                    }
-                }){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "Bearer"+" "+"xdi6xgTOkvpvYn53XZFXjuAdQ8C_0Lg1bR4vFEA-DItoPp5JV_ROe4BcFOUWwxTwtfX3Pl0NMyjwbVRai1YhGRz3PHg8w22FyVcNjD9GnSlIv11wHoU6MYmcLmM_XXYx");
-                return headers;
-            }
-        };
+        /*
+        if ( ContextCompat.checkSelfPermission( getActivity(), Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
 
-        requestQueue.add(objectRequest);
+            ActivityCompat.requestPermissions( getActivity(), new String[] {  Manifest.permission.ACCESS_FINE_LOCATION  },
+                    0);
+        }
 
-        restaurantResults = v.findViewById(R.id.restaurant_results);
-        restaurantResults.setOnItemClickListener(new ListView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Fragment nextFragment = new RestaurantPage();
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, nextFragment)
-                        .addToBackStack(null) //allow us to go back kind of maybe
-                        .commit();
-                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
-            }
-        });
+        LocationManager locationMananger = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Location location = locationMananger.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        double longitude = location.getLongitude();
+        double latitude = location.getLatitude();*/
+
+        String url = String.format("https://api.yelp.com/v3/businesses/search?term=%s&longitude=%s&latitude=%s&price=1,2,3,4",
+                searchTerm,longitude,latitude);
+
+        if (listOfRestaurants.size() == 0) {
+            JsonObjectRequest objectRequest = new JsonObjectRequest(
+                    Request.Method.GET, url, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("response", response.toString());
+                            try{
+                                JSONArray results = response.getJSONArray("businesses");
+                                for (int index = 0; index < results.length(); index++) {
+                                    JSONObject restaurant = results.getJSONObject(index);
+                                    JSONObject location = restaurant.getJSONObject("location");
+                                    String restuaurantId = restaurant.getString("id");
+                                    Double rating = restaurant.getDouble("rating");
+                                    String restaurantName = restaurant.getString("name");
+                                    String price = restaurant.getString("price");
+
+                                    String address = location.getString("address1") + " " + location.getString("city") + ", "
+                                            + location.getString("state") + " " + location.getString("zip_code");
+                                    String distance = new DecimalFormat("#.##").format(restaurant.getDouble("distance")/1000.0);
+                                    RestaurantResultAdapterItem restaurantItem = new RestaurantResultAdapterItem(restaurantName,rating,restuaurantId,price,address,distance);
+                                    listOfRestaurants.add(restaurantItem);
+                                }
+
+                                restaurantResults = v.findViewById(R.id.restaurant_results);
+                                AdapterRestaurantResults  myAdapter = new AdapterRestaurantResults(getActivity(),listOfRestaurants);
+                                restaurantResults.setAdapter(myAdapter);
+                                restaurantResults.setOnItemClickListener(new ListView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                        Fragment nextFragment = new RestaurantPage();
+                                        getActivity().getSupportFragmentManager().beginTransaction()
+                                                .replace(R.id.fragment_container, nextFragment)
+                                                .addToBackStack(null) //allow us to go back kind of maybe
+                                                .commit();
+                                        CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                                    }
+                                });
+
+                            } catch (Exception e) {
+                                Log.d("error", e.toString());
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("resquestFAIL", error.toString());
+                        }
+                    }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap headers = new HashMap();
+                    headers.put("Authorization", "Bearer"+" "+getString(R.string.yelp_key));
+                    return headers;
+                }
+            };
+
+            requestQueue.add(objectRequest);
+        }
+        else {
+            restaurantResults = v.findViewById(R.id.restaurant_results);
+            AdapterRestaurantResults  myAdapter = new AdapterRestaurantResults(getActivity(),listOfRestaurants);
+            restaurantResults.setAdapter(myAdapter);
+            restaurantResults.setOnItemClickListener(new ListView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Fragment nextFragment = new RestaurantPage();
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, nextFragment)
+                            .addToBackStack(null) //allow us to go back kind of maybe
+                            .commit();
+                    CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                }
+            });
+
+        }
         return v;
+
     }
 
 

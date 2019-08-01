@@ -7,6 +7,7 @@ public class CurrentFragmentsSingleton {
     private static CurrentFragmentsSingleton state = null;
 
     public Fragment searchState;
+    public String searchTerm;
 
     protected CurrentFragmentsSingleton(){}
 

@@ -74,6 +74,7 @@ public class SearchRecipe extends Fragment {
                 Bundle passQuery = new Bundle();
                 passQuery.putString("query", s.replaceAll("\\s", "+"));
                 nextFragment.setArguments(passQuery);
+                CurrentFragmentsSingleton.getInstance().searchTerm = s.replaceAll("\\s", "+");
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
