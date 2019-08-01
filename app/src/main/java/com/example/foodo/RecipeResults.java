@@ -1,17 +1,19 @@
 package com.example.foodo;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -21,8 +23,6 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -31,8 +31,14 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import util.AdapterRecipeResults;
+import util.RecipeResultAdapterItem;
+
 import util.AdapterRecipeResults;
 import util.RecipeResultAdapterItem;
 
@@ -47,9 +53,11 @@ public class RecipeResults extends Fragment {
     private String mParam1;
     private String mParam2;
     ListView recipeResults;
+    Spinner sort;
 
     ArrayList<RecipeResultAdapterItem> listOfRecipeResults = new ArrayList<>();
     RequestQueue queue;
+    AdapterRecipeResults myAdapter;
 
     public RecipeResults() {
         // Required empty public constructor
@@ -88,6 +96,12 @@ public class RecipeResults extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_recipe_results, container, false);
         recipeResults = v.findViewById(R.id.recipe_results);
+        // set array of items on dropdown
+        sort = (Spinner) v.findViewById(R.id.sort);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sort_dropdown, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sort.setAdapter(adapter);
+
         queue = Volley.newRequestQueue(getActivity());
 
         Bundle query = getArguments();
@@ -100,16 +114,11 @@ public class RecipeResults extends Fragment {
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-
                     try{
                         populateResultsList(response.getJSONArray("results"), recipeResults);
-
-
-
                     } catch(Exception e){
                         Log.d("JSON ERROR" , e.getMessage());
                     };
-
                 }
             }, new Response.ErrorListener() {
                 @Override
@@ -124,21 +133,31 @@ public class RecipeResults extends Fragment {
                     headers.put("X-RapidAPI-Key", getString(R.string.api_key));
                     return headers;
                 }
-
-
             };
-
             queue.add(jsonRequest);
         }
-
-
-
-
-
         else{
-
-            AdapterRecipeResults myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
+            myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
             recipeResults.setAdapter(myAdapter);
+            sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
+                        @Override
+                        public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
+                            return recipeResultAdapterItem.getTotalPrice() > t1.getTotalPrice() ? 1
+                                    : recipeResultAdapterItem.getTotalPrice() < t1.getTotalPrice() ? -1
+                                    : 0;
+                        }
+                    });
+                    myAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                }
+            });
+
 
             recipeResults.setOnItemClickListener(new ListView.OnItemClickListener() {
                 @Override
@@ -253,8 +272,26 @@ public class RecipeResults extends Fragment {
 
                 };
 
-                AdapterRecipeResults myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
+                myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
                 recipeResults.setAdapter(myAdapter);
+                sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
+                            @Override
+                            public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
+                                return recipeResultAdapterItem.getTotalPrice() > t1.getTotalPrice() ? 1
+                                        : recipeResultAdapterItem.getTotalPrice() < t1.getTotalPrice() ? -1
+                                        : 0;
+                            }
+                        });
+                        myAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                    }
+                });
 
                 recipeResults.setOnItemClickListener(new ListView.OnItemClickListener() {
                     @Override
@@ -314,10 +351,6 @@ public class RecipeResults extends Fragment {
 
         queue.add(jsonArrayRequest);
 
-
-
     }
-
-
 
 }

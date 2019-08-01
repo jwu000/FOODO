@@ -43,7 +43,7 @@ public class AdapterRecipeResults  extends BaseAdapter {
         ViewHolder viewHolder;
 
         if (view == null) {
-            view = View.inflate(context,R.layout.recipe_result_adapter_item, null);
+            view = View.inflate(context, R.layout.recipe_result_adapter_item, null);
 
             viewHolder = new ViewHolder();
             viewHolder.recipeName = view.findViewById(R.id.recipe_name);
