@@ -18,6 +18,7 @@ public class AdapterRestaurantResults extends BaseAdapter {
     Context context;
     ArrayList<RestaurantResultAdapterItem> restaurants;
 
+
     public AdapterRestaurantResults(Context context, ArrayList<RestaurantResultAdapterItem> restaurants) {
         this.context = context;
         this.restaurants = restaurants;

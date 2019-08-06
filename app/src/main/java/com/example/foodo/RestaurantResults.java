@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,8 +48,8 @@ import util.RestaurantResultAdapterItem;
 public class RestaurantResults extends Fragment {
 
     ListView restaurantResults;
-    double longitude = -71.104353;
-    double latitude = 42.326707;
+    double longitude = 0.0;
+    double latitude = 0.0;
     RequestQueue requestQueue;
     ArrayList<RestaurantResultAdapterItem> listOfRestaurants = new ArrayList<>();
 
@@ -68,18 +69,51 @@ public class RestaurantResults extends Fragment {
 
         String searchTerm = CurrentFragmentsSingleton.getInstance().searchTerm;
 
-        /*
+
         if ( ContextCompat.checkSelfPermission( getActivity(), Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
 
             ActivityCompat.requestPermissions( getActivity(), new String[] {  Manifest.permission.ACCESS_FINE_LOCATION  },
                     0);
         }
 
-        LocationManager locationMananger = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-        Location location = locationMananger.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if ( ContextCompat.checkSelfPermission( getActivity(), Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED )
+        {
+            final LocationManager locationMananger = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();*/
+
+            locationMananger.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    if (location != null) {
+                        Log.d("Location Changed", location.getLatitude() + " and " + location.getLongitude());
+                        locationMananger.removeUpdates(this);
+
+                    }
+                }
+
+                @Override
+                public void onStatusChanged(String s, int i, Bundle bundle) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String s) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String s) {
+
+                }
+            });
+            Location location = locationMananger.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
+
+        }
+
+        Log.d("long", String.valueOf(longitude));
+        Log.d("lat", String.valueOf(latitude));
 
         String url = String.format("https://api.yelp.com/v3/businesses/search?term=%s&longitude=%s&latitude=%s&price=1,2,3,4",
                 searchTerm,longitude,latitude);
