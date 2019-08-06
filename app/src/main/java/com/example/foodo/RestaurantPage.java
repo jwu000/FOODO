@@ -1,6 +1,7 @@
 package com.example.foodo;
 
 import android.content.Context;
+import android.database.CrossProcessCursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,11 +15,6 @@ import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RestaurantPage.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RestaurantPage#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class RestaurantPage extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -69,11 +65,20 @@ public class RestaurantPage extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_restaurant_page, container, false);
+
+        final Bundle restaurantInfo = getArguments();
+
         yes = view.findViewById(R.id.restaurant_yes);
         no = view.findViewById(R.id.restaurant_no);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // pass selected restaurant info into CurrentFragmentsSingleton for track
+                CurrentFragmentsSingleton.getInstance().restaurantName = restaurantInfo.getString("restaurantName");
+                CurrentFragmentsSingleton.getInstance().restaurantPrice = restaurantInfo.getString("restaurantPrice");
+                CurrentFragmentsSingleton.getInstance().rating = restaurantInfo.getDouble("rating");
+                CurrentFragmentsSingleton.getInstance().address = restaurantInfo.getString("address");
+                CurrentFragmentsSingleton.getInstance().distance = restaurantInfo.getString("distance");
                 Fragment nextFragment = new Comparison();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)
