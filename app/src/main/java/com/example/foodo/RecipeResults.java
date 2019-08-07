@@ -178,8 +178,8 @@ public class RecipeResults extends Fragment {
                             .addToBackStack(null) //allow us to go back kind of maybe
                             .commit();
                     CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
-                }
-            });
+        }
+    });
         }
 
         return v;

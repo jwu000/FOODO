@@ -71,7 +71,7 @@ public class RecipePage extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_recipe_page, container, false);
 
-        Bundle recipeInfo = getArguments();
+        final Bundle recipeInfo = getArguments();
 
         title = v.findViewById(R.id.recipe_title);
         yesButton = v.findViewById(R.id.recipe_yes);
@@ -90,6 +90,13 @@ public class RecipePage extends Fragment {
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Pass selected recipe info to currentFragmentsSingleton to keep track info
+                CurrentFragmentsSingleton.getInstance().cookTime = recipeInfo.getInt("cookTime");
+                CurrentFragmentsSingleton.getInstance().numServings = recipeInfo.getInt("numServings");
+                CurrentFragmentsSingleton.getInstance().totalPrice = recipeInfo.getString("totalPrice");
+                CurrentFragmentsSingleton.getInstance().ingredients = recipeInfo.getString("ingredients");
+                CurrentFragmentsSingleton.getInstance().instructions = recipeInfo.getString("instructions");
+
                 Fragment nextFragment = new RestaurantResults();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)

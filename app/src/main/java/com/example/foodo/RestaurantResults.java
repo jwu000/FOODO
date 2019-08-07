@@ -124,7 +124,7 @@ public class RestaurantResults extends Fragment {
                     Request.Method.GET, url, null,
                     new Response.Listener<JSONObject>() {
                         @Override
-                        public void onResponse(JSONObject response) {
+                        public void onResponse(final JSONObject response) {
                             Log.d("response", response.toString());
                             try{
                                 JSONArray results = response.getJSONArray("businesses");
@@ -150,6 +150,13 @@ public class RestaurantResults extends Fragment {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                                         Fragment nextFragment = new RestaurantPage();
+                                        Bundle restaurantInfo = new Bundle();
+                                        RestaurantResultAdapterItem theRestaurant = listOfRestaurants.get(i);
+                                        restaurantInfo.putString("restaurantName", theRestaurant.getRestaurantName());
+                                        restaurantInfo.putString("restaurantPrice", theRestaurant.getPrice());
+                                        restaurantInfo.putDouble("rating", theRestaurant.getRating());
+                                        restaurantInfo.putString("address", theRestaurant.getAddress());
+                                        restaurantInfo.putString("distance", theRestaurant.getDistance());
                                         getActivity().getSupportFragmentManager().beginTransaction()
                                                 .replace(R.id.fragment_container, nextFragment)
                                                 .addToBackStack(null) //allow us to go back kind of maybe
@@ -187,6 +194,13 @@ public class RestaurantResults extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Fragment nextFragment = new RestaurantPage();
+                    Bundle restaurantInfo = new Bundle();
+                    RestaurantResultAdapterItem theRestaurant = listOfRestaurants.get(i);
+                    restaurantInfo.putString("restaurantName", theRestaurant.getRestaurantName());
+                    restaurantInfo.putString("restaurantPrice", theRestaurant.getPrice());
+                    restaurantInfo.putDouble("rating", theRestaurant.getRating());
+                    restaurantInfo.putString("address", theRestaurant.getAddress());
+                    restaurantInfo.putString("distance", theRestaurant.getDistance());
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, nextFragment)
                             .addToBackStack(null) //allow us to go back kind of maybe
