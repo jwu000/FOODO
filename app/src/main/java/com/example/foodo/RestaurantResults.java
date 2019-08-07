@@ -87,7 +87,8 @@ public class RestaurantResults extends Fragment {
                     if (location != null) {
                         Log.d("Location Changed", location.getLatitude() + " and " + location.getLongitude());
                         locationMananger.removeUpdates(this);
-
+                        longitude = location.getLongitude();
+                        latitude = location.getLatitude();
                     }
                 }
 
