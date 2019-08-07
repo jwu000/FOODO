@@ -7,13 +7,32 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import util.AdapterReviews;
+import util.ReviewAdapterItem;
 
 
 /**
@@ -30,10 +49,16 @@ public class RestaurantPage extends Fragment {
     private String mParam2;
     Button yes;
     Button no;
+    String restaurantId;
 
     TextView rating;
     TextView restaurantName;
     TextView price;
+
+    RequestQueue requestQueue;
+    ArrayList<ReviewAdapterItem> listOfReviews = new ArrayList<>();
+
+    ListView reviewsList;
 
     public RestaurantPage() {
 
@@ -71,7 +96,7 @@ public class RestaurantPage extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_restaurant_page, container, false);
+        final View view = inflater.inflate(R.layout.fragment_restaurant_page, container, false);
 
         final Bundle restaurantInfo = getArguments();
         rating = view.findViewById(R.id.rating_num_restaurant_page);
@@ -81,6 +106,55 @@ public class RestaurantPage extends Fragment {
         rating.setText(new DecimalFormat("#.##").format(restaurantInfo.getDouble("rating")));
         restaurantName.setText(restaurantInfo.getString("restaurantName"));
         price.setText(restaurantInfo.getString("restaurantPrice"));
+        restaurantId = restaurantInfo.getString("restaurantId");
+
+        requestQueue = Volley.newRequestQueue(getActivity());
+
+        String url = String.format("https://api.yelp.com/v3/businesses/%s/reviews", restaurantId);
+
+        if(listOfReviews.size() == 0){
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try{
+                                JSONArray reviews = response.getJSONArray("reviews");
+                                for (int index = 0; index <  reviews.length(); index++) {
+                                    JSONObject aReview = reviews.getJSONObject(index);
+                                    int rating = aReview.getInt("rating");
+                                    String reviewerName = aReview.getJSONObject("user").getString("name");
+                                    String reviewText = aReview.getString("text");
+                                    String timeCreated = aReview.getString("time_created");
+                                    ReviewAdapterItem reviewItem = new ReviewAdapterItem(rating,reviewerName,reviewText,timeCreated );
+                                    listOfReviews.add(reviewItem);
+                                }
+                                reviewsList = view.findViewById(R.id.reviews_results);
+                                AdapterReviews myAdapter = new AdapterReviews(getActivity(), listOfReviews);
+                                reviewsList.setAdapter(myAdapter);
+
+
+                            } catch (Exception e) {
+                                Log.d("error", e.toString());
+                            }
+
+
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Log.d("errorResponse", error.toString());
+                }
+            }){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    HashMap headers = new HashMap();
+                    headers.put("Authorization", "Bearer"+" "+getString(R.string.yelp_key));
+                    return headers;
+                }
+            };
+
+            requestQueue.add(request);
+        }
 
         yes = view.findViewById(R.id.restaurant_yes);
         no = view.findViewById(R.id.restaurant_no);

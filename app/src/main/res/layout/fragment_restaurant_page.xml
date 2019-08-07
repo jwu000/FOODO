@@ -79,7 +79,6 @@
         android:layout_height="200dp"
         android:layout_marginTop="230dp"
         android:layout_marginLeft="30dp"
-        android:entries="@array/fake_list"
         />
 
     <TextView
