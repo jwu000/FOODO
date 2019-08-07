@@ -68,56 +68,12 @@ public class RestaurantResults extends Fragment {
         requestQueue = Volley.newRequestQueue(getActivity());
 
         String searchTerm = CurrentFragmentsSingleton.getInstance().searchTerm;
-
-
-        if ( ContextCompat.checkSelfPermission( getActivity(), Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-
-            ActivityCompat.requestPermissions( getActivity(), new String[] {  Manifest.permission.ACCESS_FINE_LOCATION  },
-                    0);
-        }
-
-        if ( ContextCompat.checkSelfPermission( getActivity(), Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED )
-        {
-            final LocationManager locationMananger = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-
-            locationMananger.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    if (location != null) {
-                        Log.d("Location Changed", location.getLatitude() + " and " + location.getLongitude());
-                        locationMananger.removeUpdates(this);
-                        longitude = location.getLongitude();
-                        latitude = location.getLatitude();
-                    }
-                }
-
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String s) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String s) {
-
-                }
-            });
-            Location location = locationMananger.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            longitude = location.getLongitude();
-            latitude = location.getLatitude();
-
-        }
-
-        Log.d("long", String.valueOf(longitude));
-        Log.d("lat", String.valueOf(latitude));
+        
+        Log.d("long", String.valueOf(CurrentFragmentsSingleton.getInstance().myLongitude));
+        Log.d("lat", String.valueOf(CurrentFragmentsSingleton.getInstance().myLatitude));
 
         String url = String.format("https://api.yelp.com/v3/businesses/search?term=%s&longitude=%s&latitude=%s&price=1,2,3,4",
-                searchTerm,longitude,latitude);
+                searchTerm,CurrentFragmentsSingleton.getInstance().myLongitude,CurrentFragmentsSingleton.getInstance().myLatitude);
 
         if (listOfRestaurants.size() == 0) {
             JsonObjectRequest objectRequest = new JsonObjectRequest(
@@ -157,6 +113,7 @@ public class RestaurantResults extends Fragment {
                                         restaurantInfo.putDouble("rating", theRestaurant.getRating());
                                         restaurantInfo.putString("address", theRestaurant.getAddress());
                                         restaurantInfo.putString("distance", theRestaurant.getDistance());
+                                        nextFragment.setArguments(restaurantInfo);
                                         getActivity().getSupportFragmentManager().beginTransaction()
                                                 .replace(R.id.fragment_container, nextFragment)
                                                 .addToBackStack(null) //allow us to go back kind of maybe
