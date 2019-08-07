@@ -7,14 +7,42 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/restaurant_title"
+        android:id="@+id/restaurant_name_restaurant_page"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/restaurant"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
         android:textStyle="bold"
         android:textSize="24sp"/>
+
+    <LinearLayout
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/rating_restaurant_page"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/rating"/>
+        <TextView
+            android:id="@+id/rating_num_restaurant_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            />
+    </LinearLayout>
+
+    <TextView
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="32dp"
+        android:id="@+id/price_dollarsign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$"
+
+        />
 
     <ImageView
         android:id="@+id/location"

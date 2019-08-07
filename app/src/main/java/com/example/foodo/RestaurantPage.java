@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.text.DecimalFormat;
 
 
 /**
@@ -27,6 +30,10 @@ public class RestaurantPage extends Fragment {
     private String mParam2;
     Button yes;
     Button no;
+
+    TextView rating;
+    TextView restaurantName;
+    TextView price;
 
     public RestaurantPage() {
 
@@ -67,9 +74,17 @@ public class RestaurantPage extends Fragment {
         View view = inflater.inflate(R.layout.fragment_restaurant_page, container, false);
 
         final Bundle restaurantInfo = getArguments();
+        rating = view.findViewById(R.id.rating_num_restaurant_page);
+        restaurantName = view.findViewById(R.id.restaurant_name_restaurant_page);
+        price = view.findViewById(R.id.price_dollarsign);
+
+        rating.setText(new DecimalFormat("#.##").format(restaurantInfo.getDouble("rating")));
+        restaurantName.setText(restaurantInfo.getString("restaurantName"));
+        price.setText(restaurantInfo.getString("restaurantPrice"));
 
         yes = view.findViewById(R.id.restaurant_yes);
         no = view.findViewById(R.id.restaurant_no);
+
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,6 +109,9 @@ public class RestaurantPage extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+
+
+
         return view;
     }
 
@@ -114,15 +132,5 @@ public class RestaurantPage extends Fragment {
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
 }

@@ -68,7 +68,7 @@ public class RestaurantResults extends Fragment {
         requestQueue = Volley.newRequestQueue(getActivity());
 
         String searchTerm = CurrentFragmentsSingleton.getInstance().searchTerm;
-        
+
         Log.d("long", String.valueOf(CurrentFragmentsSingleton.getInstance().myLongitude));
         Log.d("lat", String.valueOf(CurrentFragmentsSingleton.getInstance().myLatitude));
 
@@ -108,6 +108,7 @@ public class RestaurantResults extends Fragment {
                                         Fragment nextFragment = new RestaurantPage();
                                         Bundle restaurantInfo = new Bundle();
                                         RestaurantResultAdapterItem theRestaurant = listOfRestaurants.get(i);
+                                        restaurantInfo.putString("restaurantId", theRestaurant.getRestaurantId());
                                         restaurantInfo.putString("restaurantName", theRestaurant.getRestaurantName());
                                         restaurantInfo.putString("restaurantPrice", theRestaurant.getPrice());
                                         restaurantInfo.putDouble("rating", theRestaurant.getRating());
@@ -153,11 +154,13 @@ public class RestaurantResults extends Fragment {
                     Fragment nextFragment = new RestaurantPage();
                     Bundle restaurantInfo = new Bundle();
                     RestaurantResultAdapterItem theRestaurant = listOfRestaurants.get(i);
+                    restaurantInfo.putString("restaurantId", theRestaurant.getRestaurantId());
                     restaurantInfo.putString("restaurantName", theRestaurant.getRestaurantName());
                     restaurantInfo.putString("restaurantPrice", theRestaurant.getPrice());
                     restaurantInfo.putDouble("rating", theRestaurant.getRating());
                     restaurantInfo.putString("address", theRestaurant.getAddress());
                     restaurantInfo.putString("distance", theRestaurant.getDistance());
+                    nextFragment.setArguments(restaurantInfo);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, nextFragment)
                             .addToBackStack(null) //allow us to go back kind of maybe
