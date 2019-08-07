@@ -95,7 +95,9 @@ public class RestaurantResults extends Fragment {
                                     String address = location.getString("address1") + " " + location.getString("city") + ", "
                                             + location.getString("state") + " " + location.getString("zip_code");
                                     String distance = new DecimalFormat("#.##").format(restaurant.getDouble("distance")/1000.0);
-                                    RestaurantResultAdapterItem restaurantItem = new RestaurantResultAdapterItem(restaurantName,rating,restuaurantId,price,address,distance);
+                                    double longitude = restaurant.getJSONObject("coordinates").getDouble("longitude");
+                                    double latitude = restaurant.getJSONObject("coordinates").getDouble("latitude");
+                                    RestaurantResultAdapterItem restaurantItem = new RestaurantResultAdapterItem(restaurantName,rating,restuaurantId,price,address,distance,longitude,latitude);
                                     listOfRestaurants.add(restaurantItem);
                                 }
 
@@ -114,6 +116,8 @@ public class RestaurantResults extends Fragment {
                                         restaurantInfo.putDouble("rating", theRestaurant.getRating());
                                         restaurantInfo.putString("address", theRestaurant.getAddress());
                                         restaurantInfo.putString("distance", theRestaurant.getDistance());
+                                        restaurantInfo.putDouble("longitude", theRestaurant.getLongitude());
+                                        restaurantInfo.putDouble("latitude", theRestaurant.getLatitude());
                                         nextFragment.setArguments(restaurantInfo);
                                         getActivity().getSupportFragmentManager().beginTransaction()
                                                 .replace(R.id.fragment_container, nextFragment)
@@ -160,6 +164,8 @@ public class RestaurantResults extends Fragment {
                     restaurantInfo.putDouble("rating", theRestaurant.getRating());
                     restaurantInfo.putString("address", theRestaurant.getAddress());
                     restaurantInfo.putString("distance", theRestaurant.getDistance());
+                    restaurantInfo.putDouble("longitude", theRestaurant.getLongitude());
+                    restaurantInfo.putDouble("latitude", theRestaurant.getLatitude());
                     nextFragment.setArguments(restaurantInfo);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, nextFragment)

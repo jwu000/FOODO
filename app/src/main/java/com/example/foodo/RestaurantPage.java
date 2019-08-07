@@ -1,6 +1,8 @@
 package com.example.foodo;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.CrossProcessCursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +24,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,7 +45,7 @@ import util.ReviewAdapterItem;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RestaurantPage extends Fragment {
+public class RestaurantPage extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -54,6 +61,8 @@ public class RestaurantPage extends Fragment {
     TextView rating;
     TextView restaurantName;
     TextView price;
+    TextView address;
+    MapView map;
 
     RequestQueue requestQueue;
     ArrayList<ReviewAdapterItem> listOfReviews = new ArrayList<>();
@@ -102,30 +111,43 @@ public class RestaurantPage extends Fragment {
         rating = view.findViewById(R.id.rating_num_restaurant_page);
         restaurantName = view.findViewById(R.id.restaurant_name_restaurant_page);
         price = view.findViewById(R.id.price_dollarsign);
+        address = view.findViewById(R.id.address);
+        map = view.findViewById(R.id.restaurant_map);
 
         rating.setText(new DecimalFormat("#.##").format(restaurantInfo.getDouble("rating")));
         restaurantName.setText(restaurantInfo.getString("restaurantName"));
         price.setText(restaurantInfo.getString("restaurantPrice"));
         restaurantId = restaurantInfo.getString("restaurantId");
+        address.setText(restaurantInfo.getString("address"));
 
         requestQueue = Volley.newRequestQueue(getActivity());
 
         String url = String.format("https://api.yelp.com/v3/businesses/%s/reviews", restaurantId);
 
-        if(listOfReviews.size() == 0){
+        // *** IMPORTANT ***
+        // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
+        // objects or sub-Bundles.
+        Bundle mapViewBundle = null;
+        if (savedInstanceState != null) {
+            mapViewBundle = savedInstanceState.getBundle("MapViewBundleKey");
+        }
+        map.onCreate(mapViewBundle);
+        map.getMapAsync(this);
+
+        if (listOfReviews.size() == 0) {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            try{
+                            try {
                                 JSONArray reviews = response.getJSONArray("reviews");
-                                for (int index = 0; index <  reviews.length(); index++) {
+                                for (int index = 0; index < reviews.length(); index++) {
                                     JSONObject aReview = reviews.getJSONObject(index);
                                     int rating = aReview.getInt("rating");
                                     String reviewerName = aReview.getJSONObject("user").getString("name");
                                     String reviewText = aReview.getString("text");
                                     String timeCreated = aReview.getString("time_created");
-                                    ReviewAdapterItem reviewItem = new ReviewAdapterItem(rating,reviewerName,reviewText,timeCreated );
+                                    ReviewAdapterItem reviewItem = new ReviewAdapterItem(rating, reviewerName, reviewText, timeCreated);
                                     listOfReviews.add(reviewItem);
                                 }
                                 reviewsList = view.findViewById(R.id.reviews_results);
@@ -144,11 +166,11 @@ public class RestaurantPage extends Fragment {
                 public void onErrorResponse(VolleyError error) {
                     Log.d("errorResponse", error.toString());
                 }
-            }){
+            }) {
                 @Override
                 public Map<String, String> getHeaders() throws AuthFailureError {
                     HashMap headers = new HashMap();
-                    headers.put("Authorization", "Bearer"+" "+getString(R.string.yelp_key));
+                    headers.put("Authorization", "Bearer" + " " + getString(R.string.yelp_key));
                     return headers;
                 }
             };
@@ -185,7 +207,6 @@ public class RestaurantPage extends Fragment {
         });
 
 
-
         return view;
     }
 
@@ -207,4 +228,68 @@ public class RestaurantPage extends Fragment {
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Bundle mapViewBundle = outState.getBundle("MapViewBundleKey");
+        if (mapViewBundle == null) {
+            mapViewBundle = new Bundle();
+            outState.putBundle("MapViewBundleKey", mapViewBundle);
+        }
+
+        map.onSaveInstanceState(mapViewBundle);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        map.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        map.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        map.onStop();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        map.addMarker(new MarkerOptions().position(new LatLng(getArguments().getDouble("latitude"), getArguments().getDouble("longitude"))).title("Marker"));
+        if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    Activity#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            map.setMyLocationEnabled(true);
+        }
+
+    }
+
+    @Override
+    public void onPause() {
+        map.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        map.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        map.onLowMemory();
+    }
 }
