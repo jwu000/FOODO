@@ -11,6 +11,7 @@ public class CurrentFragmentsSingleton {
     public Fragment searchState;
     public String searchTerm;
     // store info of selected recipe
+    public String recipeName;
     public int cookTime;
     public String totalPrice;
     public int numServings;

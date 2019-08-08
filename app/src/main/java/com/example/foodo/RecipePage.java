@@ -81,16 +81,19 @@ public class RecipePage extends Fragment {
         cookTime = v.findViewById(R.id.cook_time);
         totalPrice = v.findViewById(R.id.price);
 
+
         title.setText(recipeInfo.getString("recipe_name"));
         steps.setText(recipeInfo.getString("instructions"));
         ingredients.setText(recipeInfo.getString("ingredients"));
         cookTime.setText("Time: " + recipeInfo.getInt("cookTime") + " minutes");
         totalPrice.setText("Price: $" + recipeInfo.getString("totalPrice") + " for " + recipeInfo.getInt("numServings") + " servings");
 
+
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Pass selected recipe info to currentFragmentsSingleton to keep track info
+                CurrentFragmentsSingleton.getInstance().recipeName = recipeInfo.getString("recipe_name");
                 CurrentFragmentsSingleton.getInstance().cookTime = recipeInfo.getInt("cookTime");
                 CurrentFragmentsSingleton.getInstance().numServings = recipeInfo.getInt("numServings");
                 CurrentFragmentsSingleton.getInstance().totalPrice = recipeInfo.getString("totalPrice");

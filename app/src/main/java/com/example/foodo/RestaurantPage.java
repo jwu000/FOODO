@@ -54,14 +54,14 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    TextView restaurantName;
+    TextView address;
+    ListView reviews;
     Button yes;
     Button no;
     String restaurantId;
-
     TextView rating;
-    TextView restaurantName;
     TextView price;
-    TextView address;
     MapView map;
 
     RequestQueue requestQueue;
@@ -106,8 +106,11 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_restaurant_page, container, false);
-
         final Bundle restaurantInfo = getArguments();
+
+        yes = view.findViewById(R.id.restaurant_yes);
+        no = view.findViewById(R.id.restaurant_no);
+        reviews = view.findViewById(R.id.reviews_results);
         rating = view.findViewById(R.id.rating_num_restaurant_page);
         restaurantName = view.findViewById(R.id.restaurant_name_restaurant_page);
         price = view.findViewById(R.id.price_dollarsign);
@@ -177,9 +180,6 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
 
             requestQueue.add(request);
         }
-
-        yes = view.findViewById(R.id.restaurant_yes);
-        no = view.findViewById(R.id.restaurant_no);
 
         yes.setOnClickListener(new View.OnClickListener() {
             @Override

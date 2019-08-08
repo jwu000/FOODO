@@ -10,15 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link Comparison.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link Comparison#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class Comparison extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -33,6 +31,12 @@ public class Comparison extends Fragment {
 
     Button cook;
     Button dine_out;
+    TextView recipe_name;
+    TextView recipe_price;
+    TextView recipe_time;
+    TextView restaurant_name;
+    TextView restaurant_price;
+    TextView restaurant_time;
     public Comparison() {
         // Required empty public constructor
     }
@@ -70,8 +74,22 @@ public class Comparison extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_comparison, container, false);
+        recipe_name = view.findViewById(R.id.final_recipe_name);
+        recipe_price = view.findViewById(R.id.final_recipe_price);
+        recipe_time = view.findViewById(R.id.final_recipe_time);
+        restaurant_name = view.findViewById(R.id.final_restaurant_name);
+        restaurant_price = view.findViewById(R.id.final_restaurant_price);
+        restaurant_time = view.findViewById(R.id.final_recipe_time);
         cook = view.findViewById(R.id.choose_cook);
         dine_out = view.findViewById(R.id.choose_dine_out);
+
+        recipe_name.setText(CurrentFragmentsSingleton.getInstance().recipeName);
+        recipe_price.setText(CurrentFragmentsSingleton.getInstance().totalPrice);
+        recipe_time.setText("Time: " +CurrentFragmentsSingleton.getInstance().cookTime + " minutes");
+        restaurant_name.setText(CurrentFragmentsSingleton.getInstance().restaurantName);
+        restaurant_price.setText(CurrentFragmentsSingleton.getInstance().restaurantPrice);
+        //restaurant_time.setText(CurrentFragmentsSingleton.getInstance().res);
+
         cook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
