@@ -106,6 +106,8 @@ public class Comparison extends Fragment {
         restaurant_price.setText("Price: " + priceEstimate);
         //restaurant_time.setText(CurrentFragmentsSingleton.getInstance().res);
 
+        String url = String.format("https://maps.googleapis.com/maps/api/distancematrix/json?parameters");
+
         cook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
