@@ -84,4 +84,6 @@
         <item>Sort By</item>
         <item>Price</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
+    <string name="direction">Get direction</string>
 </resources>

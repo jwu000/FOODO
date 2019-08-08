@@ -25,6 +25,9 @@ public class CurrentFragmentsSingleton {
     public String address;
     public String distance;
 
+    public double latitude;
+    public double longtitude;
+
     public double myLatitude = 0.0;
     public double myLongitude = 0.0;
 

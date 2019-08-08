@@ -191,6 +191,8 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
                 CurrentFragmentsSingleton.getInstance().rating = restaurantInfo.getDouble("rating");
                 CurrentFragmentsSingleton.getInstance().address = restaurantInfo.getString("address");
                 CurrentFragmentsSingleton.getInstance().distance = restaurantInfo.getString("distance");
+                CurrentFragmentsSingleton.getInstance().latitude = restaurantInfo.getDouble("latitude");
+                CurrentFragmentsSingleton.getInstance().longtitude = restaurantInfo.getDouble("longtitude");
                 Fragment nextFragment = new Comparison();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)

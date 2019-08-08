@@ -1,6 +1,9 @@
 package com.example.foodo;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -12,11 +15,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.MapView;
+
+import java.util.Map;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RestaurantEnd extends Fragment {
+public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -28,6 +39,9 @@ public class RestaurantEnd extends Fragment {
 
     TextView restaurantName;
     Button restaurant_time;
+    MapView mapview_end;
+    TextView direction;
+
 
     public RestaurantEnd() {
         // Required empty public constructor
@@ -67,6 +81,27 @@ public class RestaurantEnd extends Fragment {
         View view = inflater.inflate(R.layout.fragment_restaurant_end, container, false);
         restaurantName = view.findViewById(R.id.restaurant_name_end);
         restaurant_time = view.findViewById(R.id.restaurant_time);
+        mapview_end = view.findViewById(R.id.restaurant_mapView_end);
+        direction = view.findViewById(R.id.get_direction);
+
+        // *** IMPORTANT ***
+        // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
+        // objects or sub-Bundles.
+        Bundle mapViewEndBundle = null;
+        if (savedInstanceState != null) {
+            mapViewEndBundle = savedInstanceState.getBundle("MapViewBundleKey");
+        }
+        mapview_end.onCreate(mapViewEndBundle);
+        mapview_end.getMapAsync(this);
+
+        direction.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(getActivity(), MapsActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
+
 
         restaurantName.setText(CurrentFragmentsSingleton.getInstance().restaurantName);
         restaurant_time.setOnClickListener(new View.OnClickListener() {
@@ -100,15 +135,78 @@ public class RestaurantEnd extends Fragment {
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Bundle mapViewEndBundle = outState.getBundle("MapViewBundleKey");
+        if (mapViewEndBundle == null) {
+            mapViewEndBundle = new Bundle();
+            outState.putBundle("MapViewBundleKey", mapViewEndBundle);
+        }
+
+        mapview_end.onSaveInstanceState(mapViewEndBundle);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapview_end.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapview_end.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapview_end.onStop();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap mapViewEnd) {
+        mapViewEnd.addMarker(new MarkerOptions().position(new LatLng(CurrentFragmentsSingleton.getInstance().latitude, CurrentFragmentsSingleton.getInstance().longtitude)).title("Marker"));
+        if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    Activity#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for Activity#requestPermissions for more details.
+            mapViewEnd.setMyLocationEnabled(true);
+        }
+
+    }
+
+    @Override
+    public void onPause() {
+        mapview_end.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mapview_end.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapview_end.onLowMemory();
+    }
+
+
+//    public void OnClickListener() {
+//        String uri = "geo:" + CurrentFragmentsSingleton.getInstance().latitude + "," + CurrentFragmentsSingleton.getInstance().longtitude;
+//        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+//        getActivity().startActivity(intent);
+//    }
+
+
 
 }
