@@ -73,7 +73,7 @@ public class RecipeEnd extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recipe_end, container, false);
         cook_time = view.findViewById(R.id.cook_time);
         recipeName = view.findViewById(R.id.recipe_name_end);
-        steps = view.findViewById(R.id.steps_details_end);
+        steps = view.findViewById(R.id.steps);
         ingredients = view.findViewById(R.id.ingredients_end);
         cookTime = view.findViewById(R.id.recipe_cook_time_end);
         price = view.findViewById(R.id.recipe_price_end);
@@ -82,7 +82,7 @@ public class RecipeEnd extends Fragment {
         steps.setText(CurrentFragmentsSingleton.getInstance().instructions);
         ingredients.setText(CurrentFragmentsSingleton.getInstance().ingredients);
         cookTime.setText("Time: " + CurrentFragmentsSingleton.getInstance().cookTime + " minutes");
-        price.setText(CurrentFragmentsSingleton.getInstance().totalPrice);
+        price.setText("Price: $" + CurrentFragmentsSingleton.getInstance().totalPrice + " for " + CurrentFragmentsSingleton.getInstance().numServings + " servings");
 
         cook_time.setOnClickListener(new View.OnClickListener() {
             @Override

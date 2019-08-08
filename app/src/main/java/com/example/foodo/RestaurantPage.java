@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -261,7 +262,8 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions().position(new LatLng(getArguments().getDouble("latitude"), getArguments().getDouble("longitude"))).title("Marker"));
+        LatLng theRestaurnt = new LatLng(getArguments().getDouble("latitude"), getArguments().getDouble("longitude"));
+        map.addMarker(new MarkerOptions().position(theRestaurnt).title("Marker"));
         if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    Activity#requestPermissions
@@ -270,8 +272,11 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for Activity#requestPermissions for more details.
-            map.setMyLocationEnabled(true);
+            return;
         }
+        map.setMyLocationEnabled(true);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(theRestaurnt,12.0f));
+
 
     }
 

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,10 +85,25 @@ public class Comparison extends Fragment {
         dine_out = view.findViewById(R.id.choose_dine_out);
 
         recipe_name.setText(CurrentFragmentsSingleton.getInstance().recipeName);
-        recipe_price.setText(CurrentFragmentsSingleton.getInstance().totalPrice);
+        recipe_price.setText("Price: " + CurrentFragmentsSingleton.getInstance().totalPrice + " for " + CurrentFragmentsSingleton.getInstance().numServings + " servings");
         recipe_time.setText("Time: " +CurrentFragmentsSingleton.getInstance().cookTime + " minutes");
         restaurant_name.setText(CurrentFragmentsSingleton.getInstance().restaurantName);
-        restaurant_price.setText(CurrentFragmentsSingleton.getInstance().restaurantPrice);
+
+        String priceEstimate;
+        String dollarSigns = CurrentFragmentsSingleton.getInstance().restaurantPrice;
+        if (dollarSigns.equals("$")) {
+            priceEstimate = "$1-10";
+        }
+        else if (dollarSigns.equals("$$")) {
+            priceEstimate = "$11-30";
+        }
+        else if (dollarSigns.equals("$$$")) {
+            priceEstimate = "$31-60";
+        }
+        else {
+            priceEstimate = "$61+";
+        }
+        restaurant_price.setText("Price: " + priceEstimate);
         //restaurant_time.setText(CurrentFragmentsSingleton.getInstance().res);
 
         cook.setOnClickListener(new View.OnClickListener() {
