@@ -10,15 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RestaurantEnd.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RestaurantEnd#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class RestaurantEnd extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -30,6 +26,7 @@ public class RestaurantEnd extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    TextView restaurantName;
     Button restaurant_time;
 
     public RestaurantEnd() {
@@ -68,7 +65,10 @@ public class RestaurantEnd extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_restaurant_end, container, false);
+        restaurantName = view.findViewById(R.id.restaurant_name_end);
         restaurant_time = view.findViewById(R.id.restaurant_time);
+
+        restaurantName.setText(CurrentFragmentsSingleton.getInstance().restaurantName);
         restaurant_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

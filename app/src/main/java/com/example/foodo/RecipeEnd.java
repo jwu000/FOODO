@@ -10,21 +10,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link RecipeEnd.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link RecipeEnd#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class RecipeEnd extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    TextView recipeName;
+    TextView steps;
+    TextView ingredients;
+    TextView cookTime;
+    TextView price;
+
     Button cook_time;
 
     // TODO: Rename and change types of parameters
@@ -69,6 +72,18 @@ public class RecipeEnd extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipe_end, container, false);
         cook_time = view.findViewById(R.id.cook_time);
+        recipeName = view.findViewById(R.id.recipe_name_end);
+        steps = view.findViewById(R.id.steps_details_end);
+        ingredients = view.findViewById(R.id.ingredients_end);
+        cookTime = view.findViewById(R.id.recipe_cook_time_end);
+        price = view.findViewById(R.id.recipe_price_end);
+
+        recipeName.setText(CurrentFragmentsSingleton.getInstance().recipeName);
+        steps.setText(CurrentFragmentsSingleton.getInstance().instructions);
+        ingredients.setText(CurrentFragmentsSingleton.getInstance().ingredients);
+        cookTime.setText("Time: " + CurrentFragmentsSingleton.getInstance().cookTime + " minutes");
+        price.setText(CurrentFragmentsSingleton.getInstance().totalPrice);
+
         cook_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
