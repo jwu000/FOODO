@@ -50,7 +50,7 @@
         android:layout_height="100dp"
         android:layout_marginTop="50dp"
         android:layout_gravity="center_horizontal"></com.google.android.gms.maps.MapView>
-    
+
 
     <TextView
         android:id="@+id/address"
