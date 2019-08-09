@@ -136,7 +136,13 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 0) {
             if(grantResults.length >0 ){
                 if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+                }
+                else {
+                    ActivityCompat.requestPermissions( this, new String[] {  Manifest.permission.ACCESS_FINE_LOCATION  },0);
+                }
             }
+
         }
 
     }

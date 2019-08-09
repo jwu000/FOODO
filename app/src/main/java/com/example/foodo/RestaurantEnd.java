@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
@@ -168,7 +169,8 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap mapViewEnd) {
-        mapViewEnd.addMarker(new MarkerOptions().position(new LatLng(CurrentFragmentsSingleton.getInstance().latitude, CurrentFragmentsSingleton.getInstance().longtitude)).title("Marker"));
+        LatLng theRestaurant = new LatLng(CurrentFragmentsSingleton.getInstance().latitude, CurrentFragmentsSingleton.getInstance().longtitude);
+        mapViewEnd.addMarker(new MarkerOptions().position(theRestaurant).title("Marker"));
         if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    Activity#requestPermissions
@@ -177,8 +179,10 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for Activity#requestPermissions for more details.
-            mapViewEnd.setMyLocationEnabled(true);
+            return;
         }
+        mapViewEnd.setMyLocationEnabled(true);
+        mapViewEnd.moveCamera(CameraUpdateFactory.newLatLngZoom(theRestaurant,12.0f));
 
     }
 

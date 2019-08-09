@@ -98,7 +98,7 @@ public class RecipeResults extends Fragment {
         recipeResults = v.findViewById(R.id.recipe_results);
         // set array of items on dropdown
         sort = (Spinner) v.findViewById(R.id.sort);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sort_dropdown, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sort_dropdown_recipe, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sort.setAdapter(adapter);
 
@@ -142,15 +142,30 @@ public class RecipeResults extends Fragment {
             sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
-                        @Override
-                        public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
-                            return recipeResultAdapterItem.getTotalPrice() > t1.getTotalPrice() ? 1
-                                    : recipeResultAdapterItem.getTotalPrice() < t1.getTotalPrice() ? -1
-                                    : 0;
-                        }
-                    });
-                    myAdapter.notifyDataSetChanged();
+                    String sortBy =getResources().getStringArray(R.array.sort_dropdown_recipe)[i];
+                    if (sortBy.equals("Price")) {
+                        Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
+                            @Override
+                            public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
+                                return recipeResultAdapterItem.getTotalPrice() > t1.getTotalPrice() ? 1
+                                        : recipeResultAdapterItem.getTotalPrice() < t1.getTotalPrice() ? -1
+                                        : 0;
+                            }
+                        });
+                        myAdapter.notifyDataSetChanged();
+                    }
+                    else if (sortBy.equals("Time")) {
+                        Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
+                            @Override
+                            public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
+                                return recipeResultAdapterItem.getTimeNeeded() > t1.getTimeNeeded() ? 1
+                                        : recipeResultAdapterItem.getTimeNeeded() < t1.getTimeNeeded() ? -1
+                                        : 0;
+                            }
+                        });
+                        myAdapter.notifyDataSetChanged();
+                    }
+
                 }
 
                 @Override
@@ -178,8 +193,8 @@ public class RecipeResults extends Fragment {
                             .addToBackStack(null) //allow us to go back kind of maybe
                             .commit();
                     CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
-        }
-    });
+                }
+            });
         }
 
         return v;
@@ -277,15 +292,27 @@ public class RecipeResults extends Fragment {
                 sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
-                            @Override
-                            public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
-                                return recipeResultAdapterItem.getTotalPrice() > t1.getTotalPrice() ? 1
-                                        : recipeResultAdapterItem.getTotalPrice() < t1.getTotalPrice() ? -1
-                                        : 0;
-                            }
-                        });
-                        myAdapter.notifyDataSetChanged();
+
+                        String sortBy =getResources().getStringArray(R.array.sort_dropdown_recipe)[i];
+                        if (sortBy.equals("Price")) {
+                            Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
+                                @Override
+                                public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
+                                    return Double.valueOf(recipeResultAdapterItem.getTotalPrice()).compareTo(Double.valueOf(t1.getTotalPrice()));
+
+                                }
+                            });
+                            myAdapter.notifyDataSetChanged();
+                        }
+                        else if (sortBy.equals("Time")) {
+                            Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
+                                @Override
+                                public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
+                                    return Integer.valueOf(recipeResultAdapterItem.getTimeNeeded()).compareTo(Integer.valueOf(t1.getTimeNeeded()));
+                                }
+                            });
+                            myAdapter.notifyDataSetChanged();
+                        }
                     }
 
                     @Override

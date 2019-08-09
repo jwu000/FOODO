@@ -84,6 +84,16 @@
         <item>Sort By</item>
         <item>Price</item>
     </string-array>
+    <string-array name="sort_dropdown_recipe">
+        <item>Sort By</item>
+        <item>Price</item>
+        <item>Time</item>
+    </string-array>
+    <string-array name="sort_dropdown_restaurant">
+        <item>Sort By</item>
+        <item>Price</item>
+        <item>Distance</item>
+    </string-array>
     <string name="title_activity_maps">Map</string>
     <string name="direction">Get direction</string>
 </resources>

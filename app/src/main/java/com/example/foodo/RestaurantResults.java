@@ -74,7 +74,7 @@ public class RestaurantResults extends Fragment {
         requestQueue = Volley.newRequestQueue(getActivity());
 
         restaurant_sort = (Spinner) v.findViewById(R.id.sort_restaurant);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sort_dropdown, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sort_dropdown_restaurant, android.R.layout.simple_spinner_item);
         restaurant_sort.setAdapter(adapter);
 
         String searchTerm = CurrentFragmentsSingleton.getInstance().searchTerm;
@@ -117,13 +117,25 @@ public class RestaurantResults extends Fragment {
                                 restaurant_sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                     @Override
                                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                        Collections.sort(listOfRestaurants, new Comparator<RestaurantResultAdapterItem>() {
-                                            @Override
-                                            public int compare(RestaurantResultAdapterItem restaurantResultAdapterItem, RestaurantResultAdapterItem t1) {
-                                                return restaurantResultAdapterItem.getPrice().compareTo(t1.getPrice());
+                                        String sortBy =getResources().getStringArray(R.array.sort_dropdown_restaurant)[i];
+                                        if (sortBy.equals("Price")){
+                                            Collections.sort(listOfRestaurants, new Comparator<RestaurantResultAdapterItem>() {
+                                                @Override
+                                                public int compare(RestaurantResultAdapterItem restaurantResultAdapterItem, RestaurantResultAdapterItem t1) {
+                                                    return restaurantResultAdapterItem.getPrice().compareTo(t1.getPrice());
 
-                                            }
-                                        });
+                                                }
+                                            });
+                                        }
+                                        else if (sortBy.equals("Distance")) {
+                                            Collections.sort(listOfRestaurants, new Comparator<RestaurantResultAdapterItem>() {
+                                                @Override
+                                                public int compare(RestaurantResultAdapterItem restaurantResultAdapterItem, RestaurantResultAdapterItem t1) {
+                                                    return Double.valueOf(restaurantResultAdapterItem.getDistance()).compareTo(Double.valueOf(t1.getDistance()));
+                                                }
+                                            });
+                                        }
+
                                         myAdapter.notifyDataSetChanged();
                                     }
 
