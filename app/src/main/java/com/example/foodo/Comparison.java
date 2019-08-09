@@ -13,7 +13,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 import org.w3c.dom.Text;
+
+import java.util.Map;
 
 
 /**
@@ -38,6 +49,9 @@ public class Comparison extends Fragment {
     TextView restaurant_name;
     TextView restaurant_price;
     TextView restaurant_time;
+
+    RequestQueue requestQueue;
+
     public Comparison() {
         // Required empty public constructor
     }
@@ -75,12 +89,14 @@ public class Comparison extends Fragment {
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_comparison, container, false);
+        requestQueue = Volley.newRequestQueue(getActivity());
+
         recipe_name = view.findViewById(R.id.final_recipe_name);
         recipe_price = view.findViewById(R.id.final_recipe_price);
         recipe_time = view.findViewById(R.id.final_recipe_time);
         restaurant_name = view.findViewById(R.id.final_restaurant_name);
         restaurant_price = view.findViewById(R.id.final_restaurant_price);
-        restaurant_time = view.findViewById(R.id.final_recipe_time);
+        restaurant_time = view.findViewById(R.id.final_restaurant_time);
         cook = view.findViewById(R.id.choose_cook);
         dine_out = view.findViewById(R.id.choose_dine_out);
 
@@ -106,7 +122,42 @@ public class Comparison extends Fragment {
         restaurant_price.setText("Price: " + priceEstimate);
         //restaurant_time.setText(CurrentFragmentsSingleton.getInstance().res);
 
-        String url = String.format("https://maps.googleapis.com/maps/api/distancematrix/json?parameters");
+        double myLatitude = CurrentFragmentsSingleton.getInstance().myLatitude;
+        double myLongitude = CurrentFragmentsSingleton.getInstance().myLongitude;
+        String address = CurrentFragmentsSingleton.getInstance().address.replaceAll("\\s","+");
+        String url = String.format("https://maps.googleapis.com/maps/api/distancematrix/" +
+                "json?origins=%s,%s&destinations=%s&key=%s",myLatitude,myLongitude,address,getString(R.string.google_key));
+
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try{
+                    Log.d("response", response.toString());
+                    String duration = response.getJSONArray("rows").getJSONObject(0)
+                            .getJSONArray("elements").getJSONObject(0).getJSONObject("duration").getString("text");
+                    Log.d("duration", duration);
+                    restaurant_time.setText("Time: "+duration);
+                }
+                catch (Exception e){
+                    Log.d("error", e.toString());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error", error.toString());
+            }
+        }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                return super.getHeaders();
+            }
+        };
+
+        requestQueue.add(request);
 
         cook.setOnClickListener(new View.OnClickListener() {
             @Override

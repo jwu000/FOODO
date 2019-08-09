@@ -182,6 +182,12 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
             requestQueue.add(request);
         }
 
+        else {
+            reviewsList = view.findViewById(R.id.reviews_results);
+            AdapterReviews myAdapter = new AdapterReviews(getActivity(), listOfReviews);
+            reviewsList.setAdapter(myAdapter);
+        }
+
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
