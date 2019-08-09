@@ -15,6 +15,14 @@
         android:textColor="@android:color/black"
         android:text="@string/restaurant_results_text" />
 
+    <Spinner
+        android:id="@+id/sort_restaurant"
+        android:layout_width="140dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="270dp"
+        android:layout_marginTop="50dp"
+        android:contextClickable="true" />
+
     <ListView
         android:id="@+id/restaurant_results"
         android:layout_gravity="top|center"

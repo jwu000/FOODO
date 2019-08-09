@@ -18,7 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -35,6 +37,8 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +54,9 @@ public class RestaurantResults extends Fragment {
     ListView restaurantResults;
     double longitude = 0.0;
     double latitude = 0.0;
+    Spinner restaurant_sort;
     RequestQueue requestQueue;
+    AdapterRestaurantResults  myAdapter;
     ArrayList<RestaurantResultAdapterItem> listOfRestaurants = new ArrayList<>();
 
     public RestaurantResults() {
@@ -66,6 +72,10 @@ public class RestaurantResults extends Fragment {
         final View v = inflater.inflate(R.layout.fragment_restaurant_results, container, false);
 
         requestQueue = Volley.newRequestQueue(getActivity());
+
+        restaurant_sort = (Spinner) v.findViewById(R.id.sort_restaurant);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sort_dropdown, android.R.layout.simple_spinner_item);
+        restaurant_sort.setAdapter(adapter);
 
         String searchTerm = CurrentFragmentsSingleton.getInstance().searchTerm;
 
@@ -102,8 +112,26 @@ public class RestaurantResults extends Fragment {
                                 }
 
                                 restaurantResults = v.findViewById(R.id.restaurant_results);
-                                AdapterRestaurantResults  myAdapter = new AdapterRestaurantResults(getActivity(),listOfRestaurants);
+                                myAdapter = new AdapterRestaurantResults(getActivity(),listOfRestaurants);
                                 restaurantResults.setAdapter(myAdapter);
+                                restaurant_sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                    @Override
+                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                                        Collections.sort(listOfRestaurants, new Comparator<RestaurantResultAdapterItem>() {
+                                            @Override
+                                            public int compare(RestaurantResultAdapterItem restaurantResultAdapterItem, RestaurantResultAdapterItem t1) {
+                                                return restaurantResultAdapterItem.getPrice().compareTo(t1.getPrice());
+
+                                            }
+                                        });
+                                        myAdapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                                    }
+                                });
                                 restaurantResults.setOnItemClickListener(new ListView.OnItemClickListener() {
                                     @Override
                                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -150,8 +178,27 @@ public class RestaurantResults extends Fragment {
         }
         else {
             restaurantResults = v.findViewById(R.id.restaurant_results);
-            AdapterRestaurantResults  myAdapter = new AdapterRestaurantResults(getActivity(),listOfRestaurants);
+            myAdapter = new AdapterRestaurantResults(getActivity(),listOfRestaurants);
             restaurantResults.setAdapter(myAdapter);
+            restaurant_sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    Collections.sort(listOfRestaurants, new Comparator<RestaurantResultAdapterItem>() {
+                        @Override
+                        public int compare(RestaurantResultAdapterItem restaurantResultAdapterItem, RestaurantResultAdapterItem t1) {
+                            return restaurantResultAdapterItem.getPrice().compareTo(t1.getPrice());
+
+                        }
+                    });
+                    myAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+
             restaurantResults.setOnItemClickListener(new ListView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

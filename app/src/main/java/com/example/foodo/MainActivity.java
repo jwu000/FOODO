@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
             ActivityCompat.requestPermissions( this, new String[] {  Manifest.permission.ACCESS_FINE_LOCATION  },
                     0);
+
         }
 
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED )
@@ -128,4 +129,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 0) {
+            if(grantResults.length >0 ){
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            }
+        }
+
+    }
 }

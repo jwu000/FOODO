@@ -9,8 +9,6 @@ public class RestaurantResultAdapterItem {
     String address;
     String distance;
 
-
-
     double longitude;
     double latitude;
 
