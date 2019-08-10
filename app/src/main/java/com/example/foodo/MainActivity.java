@@ -33,7 +33,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
 
-
+    BottomNavigationView navView;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         //add back_arrow on the toolbar
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         loadFragment(new SearchRecipe());
@@ -148,7 +148,10 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_restart) {
             Fragment nextFragment = new SearchRecipe();
             CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+            navView = findViewById(R.id.nav_view);
+            navView.getMenu().getItem(0).setChecked(true);
             return loadFragment(nextFragment);
+
         }
         else {
             return false;

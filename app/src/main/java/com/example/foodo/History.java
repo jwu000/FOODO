@@ -69,7 +69,7 @@ public class History extends Fragment {
 
             }
         });
-    
+
         DatabaseReference history = users.child(CurrentFragmentsSingleton.getInstance().user).child("history");
         historyList = v.findViewById(R.id.history_list);
         myAdapter = new AdapterHistory(getActivity(),listHistory);
