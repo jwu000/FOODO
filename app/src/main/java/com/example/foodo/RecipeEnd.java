@@ -101,6 +101,7 @@ public class RecipeEnd extends Fragment {
                         .commit();
                 CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
 
+
                 DatabaseReference newHistory = FirebaseDatabase.getInstance().getReference().child("users")
                         .child(CurrentFragmentsSingleton.getInstance().user).child("history").child(String.valueOf(new Date().getTime()));
                 Map<String,String> historyData = new HashMap<String,String>();

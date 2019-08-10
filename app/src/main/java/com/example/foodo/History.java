@@ -56,9 +56,21 @@ public class History extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_history, container, false);
 
-        DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("users")
-                .child(CurrentFragmentsSingleton.getInstance().user);
-        DatabaseReference history = user.child("history");
+        DatabaseReference users = FirebaseDatabase.getInstance().getReference().child("users");
+
+        users.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    
+        DatabaseReference history = users.child(CurrentFragmentsSingleton.getInstance().user).child("history");
         historyList = v.findViewById(R.id.history_list);
         myAdapter = new AdapterHistory(getActivity(),listHistory);
         historyList.setAdapter(myAdapter);

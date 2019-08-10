@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //add back_arrow on the toolbar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -133,6 +134,24 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_bar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_restart) {
+            Fragment nextFragment = new SearchRecipe();
+            CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+            return loadFragment(nextFragment);
+        }
+        else {
+            return false;
         }
     }
 
