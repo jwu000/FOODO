@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FavoriteRestaurant">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:id="@+id/favorite_restaurant_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/restaurant"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:textStyle="bold"
+        android:textSize="24sp"/>
+
+
+    <TextView
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="32dp"
+        android:id="@+id/favorite_price_dollarsign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$"
+
+        />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/favorite_restaurant_map"
+        android:layout_width="350dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="100dp"
+        android:layout_gravity="center_horizontal"></com.google.android.gms.maps.MapView>
+
+
+    <TextView
+        android:id="@+id/favorite_address"
+        android:textAlignment="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/address"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="510dp"
+        android:layout_gravity="center_horizontal"
+        />
+
+
+
+</FrameLayout>
