@@ -4,69 +4,101 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import util.AdapterHistory;
+import util.HistoryAdapterItem;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link History.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link History#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class History extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
 
+
+    ArrayList<HistoryAdapterItem> listHistory = new ArrayList<HistoryAdapterItem>();
+    AdapterHistory myAdapter;
+
+    ListView historyList;
 
     public History() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment History.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static History newInstance(String param1, String param2) {
-        History fragment = new History();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_history, container, false);
+        View v = inflater.inflate(R.layout.fragment_history, container, false);
+
+        DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(CurrentFragmentsSingleton.getInstance().user);
+        DatabaseReference history = user.child("history");
+        historyList = v.findViewById(R.id.history_list);
+        myAdapter = new AdapterHistory(getActivity(),listHistory);
+        historyList.setAdapter(myAdapter);
+
+        history.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Log.d("time", dataSnapshot.getKey());
+                HashMap<String,String> historyData = (HashMap<String,String>)dataSnapshot.getValue();
+                Log.d("name", historyData.get("name"));
+                HistoryAdapterItem historyItem = new HistoryAdapterItem(historyData.get("name"),
+                        historyData.get("type"), dataSnapshot.getKey());
+                listHistory.add(0,historyItem);
+                myAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -21,7 +21,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.MapView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -114,6 +118,13 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
                 CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+
+                DatabaseReference newHistory = FirebaseDatabase.getInstance().getReference().child("users")
+                        .child(CurrentFragmentsSingleton.getInstance().user).child("history").child(String.valueOf(new Date().getTime()));
+                Map<String,String> historyData = new HashMap<String,String>();
+                historyData.put("type", "restaurant");
+                historyData.put("name", CurrentFragmentsSingleton.getInstance().restaurantName);
+                newHistory.setValue(historyData);
             }
         });
         return view;
