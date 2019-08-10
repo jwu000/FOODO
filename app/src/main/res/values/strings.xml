@@ -48,13 +48,13 @@
     <string name="steps">Steps:</string>
     <string name="cook_time">Cook Time:</string>
     <string name="recipe_price">Price:</string>
-    <string name="recipe_preference_query">Do you want to use this recipe?</string>
+    <string name="recipe_preference_query">Do you want to use this recipe to compare?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="restaurant">Restaurant 1</string>
     <string name="address">Address</string>
     <string name="reviews">Reviews:</string>
-    <string name="restaurant_preference_query">Would you like to go to this restaurant?</string>
+    <string name="restaurant_preference_query">Would you like to use this restaurant to compare?</string>
     <string-array name="fake_list">
         <item>Element1</item>
         <item>Element2</item>
