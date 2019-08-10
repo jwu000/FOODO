@@ -64,18 +64,25 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 emailData = email.getText().toString();
                 passwordData = password.getText().toString();
-                logIn = new Intent(LoginActivity.this, MainActivity.class);
-                authenticationRef.createUserWithEmailAndPassword(emailData, passwordData).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-                            startActivity(logIn);
-                        }else{
-                            Toast.makeText(getApplicationContext(), "Register Fail", Toast.LENGTH_SHORT).show();
+                if (emailData == null || passwordData == null || emailData.equals("") || passwordData.equals("")){
+                    Toast.makeText(getApplicationContext(), "Please fill in both email and password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else {
+                    logIn = new Intent(LoginActivity.this, MainActivity.class);
+                    authenticationRef.createUserWithEmailAndPassword(emailData, passwordData).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                                startActivity(logIn);
+                            }else{
+                                Toast.makeText(getApplicationContext(), "Register Fail", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }
+
             }
         });
 

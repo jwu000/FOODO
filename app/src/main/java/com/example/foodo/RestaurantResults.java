@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -94,6 +95,10 @@ public class RestaurantResults extends Fragment {
                             Log.d("response", response.toString());
                             try{
                                 JSONArray results = response.getJSONArray("businesses");
+                                if (results.length() == 0) {
+                                    Toast.makeText(getActivity().getBaseContext(), "No results. Please go back and search again.", Toast.LENGTH_LONG).show();
+                                    return;
+                                }
                                 for (int index = 0; index < results.length(); index++) {
                                     JSONObject restaurant = results.getJSONObject(index);
                                     JSONObject location = restaurant.getJSONObject("location");

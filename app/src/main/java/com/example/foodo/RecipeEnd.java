@@ -13,11 +13,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.Date;
 import java.util.HashMap;
 
+
 import com.google.firebase.database.DatabaseReference;
+
+import java.util.Map;
 
 
 /**
@@ -108,8 +113,13 @@ public class RecipeEnd extends Fragment {
                         .commit();
                 CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
 
-               // FirebaseDatabase.getInstance().getReference().child("users")
-                    //    .child(CurrentFragmentsSingleton.getInstance().user).child("history").child(String.valueOf(new Date().getTime()));
+                DatabaseReference newHistory = FirebaseDatabase.getInstance().getReference().child("users")
+                        .child(CurrentFragmentsSingleton.getInstance().user).child("history").child(String.valueOf(new Date().getTime()));
+                Map<String,String> historyData = new HashMap<String,String>();
+                historyData.put("type", "recipe");
+                historyData.put("name", CurrentFragmentsSingleton.getInstance().recipeName);
+                newHistory.setValue(historyData);
+
             }
         });
 

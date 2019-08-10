@@ -67,6 +67,12 @@ public class SearchRecipe extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_search_recipe, container, false);
         search = v.findViewById(R.id.search_input);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search.setIconified(false);
+            }
+        });
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String s) {

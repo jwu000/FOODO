@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -117,6 +118,7 @@ public class RecipeResults extends Fragment {
                     try{
                         populateResultsList(response.getJSONArray("results"), recipeResults);
                     } catch(Exception e){
+                        Toast.makeText(getActivity().getBaseContext(), "No results. Please go back and search again.", Toast.LENGTH_LONG).show();
                         Log.d("JSON ERROR" , e.getMessage());
                     };
                 }

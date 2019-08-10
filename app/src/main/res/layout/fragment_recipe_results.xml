@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".RecipeResults">
 
+
     <Spinner
         android:id="@+id/sort"
         android:layout_width="140dp"
