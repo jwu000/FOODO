@@ -12,6 +12,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Date;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,6 +97,9 @@ public class RecipeEnd extends Fragment {
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
                 CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+
+               // FirebaseDatabase.getInstance().getReference().child("users")
+                    //    .child(CurrentFragmentsSingleton.getInstance().user).child("history").child(String.valueOf(new Date().getTime()));
             }
         });
         return view;

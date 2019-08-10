@@ -8,6 +8,7 @@ public class CurrentFragmentsSingleton {
 
     private static CurrentFragmentsSingleton state = null;
 
+    public String user;
     public Fragment searchState;
     public String searchTerm;
     // store info of selected recipe
