@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,7 +24,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.MapView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,11 +42,14 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
     private String mParam1;
     private String mParam2;
 
+    DatabaseReference dbRootReference;
+    private DatabaseReference dbChildReference;
+
     TextView restaurantName;
     Button restaurant_time;
     MapView mapview_end;
     TextView direction;
-
+    RadioButton add_favorite_restaurant;
 
     public RestaurantEnd() {
         // Required empty public constructor
@@ -84,10 +87,15 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_restaurant_end, container, false);
+        dbRootReference = FirebaseDatabase.getInstance().getReference();
+        dbChildReference = dbRootReference.child("users").child(CurrentFragmentsSingleton.getInstance().user)
+                .child("favorites").child("restaurants");
+
         restaurantName = view.findViewById(R.id.restaurant_name_end);
         restaurant_time = view.findViewById(R.id.restaurant_time);
         mapview_end = view.findViewById(R.id.restaurant_mapView_end);
         direction = view.findViewById(R.id.get_direction);
+        add_favorite_restaurant = view.findViewById(R.id.restaurant_favorite_yes);
 
         // *** IMPORTANT ***
         // MapView requires that the Bundle you pass contain _ONLY_ MapView SDK
@@ -127,25 +135,29 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
                 newHistory.setValue(historyData);
             }
         });
+
+        add_favorite_restaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // save info to favorite db
+                String name = CurrentFragmentsSingleton.getInstance().restaurantName;
+                String address = CurrentFragmentsSingleton.getInstance().address;
+                double latitude = CurrentFragmentsSingleton.getInstance().latitude;
+                double longtitude = CurrentFragmentsSingleton.getInstance().longtitude;
+                String price = CurrentFragmentsSingleton.getInstance().restaurantPrice;
+
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("address", address);
+                hashMap.put("latitude", latitude);
+                hashMap.put("longtitude", longtitude);
+                hashMap.put("price", price);
+
+                dbChildReference.child(name).setValue(hashMap);
+            }
+        });
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -216,11 +228,6 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
     }
 
 
-//    public void OnClickListener() {
-//        String uri = "geo:" + CurrentFragmentsSingleton.getInstance().latitude + "," + CurrentFragmentsSingleton.getInstance().longtitude;
-//        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
-//        getActivity().startActivity(intent);
-//    }
 
 
 

@@ -81,12 +81,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <RadioButton
+            android:id="@+id/add_favorite_recipe_yes"
             android:text="@string/yes_radio"
             android:textSize="20sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <RadioButton
+            android:id="@+id/add_favorite_recipe_no"
             android:text="@string/no_radio"
             android:textSize="20sp"
             android:layout_width="wrap_content"

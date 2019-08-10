@@ -1,6 +1,7 @@
 package com.example.foodo;
 
 import android.content.Context;
+import android.database.CrossProcessCursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,13 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
+import com.google.firebase.database.FirebaseDatabase;
 import java.util.Date;
 import java.util.HashMap;
+
+
+import com.google.firebase.database.DatabaseReference;
+
 import java.util.Map;
 
 
@@ -28,6 +33,8 @@ public class RecipeEnd extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    DatabaseReference dbRootReference;
+    private DatabaseReference dbChildReference;
 
     TextView recipeName;
     TextView steps;
@@ -36,6 +43,7 @@ public class RecipeEnd extends Fragment {
     TextView price;
 
     Button cook_time;
+    RadioButton add_favorite_yes;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -74,10 +82,14 @@ public class RecipeEnd extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        dbRootReference = FirebaseDatabase.getInstance().getReference();
+        dbChildReference = dbRootReference.child("users").child(CurrentFragmentsSingleton.getInstance().user).child("favorites").child("recipes");
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipe_end, container, false);
+        add_favorite_yes = view.findViewById(R.id.add_favorite_recipe_yes);
         cook_time = view.findViewById(R.id.cook_time);
         recipeName = view.findViewById(R.id.recipe_name_end);
         steps = view.findViewById(R.id.steps);
@@ -111,35 +123,30 @@ public class RecipeEnd extends Fragment {
 
             }
         });
+
+        add_favorite_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // save info to favorite db
+                String name = CurrentFragmentsSingleton.getInstance().recipeName;
+                String ingredients = CurrentFragmentsSingleton.getInstance().ingredients;
+                String totalPrice = CurrentFragmentsSingleton.getInstance().totalPrice;
+                int numServings = CurrentFragmentsSingleton.getInstance().numServings;
+                String instruction = CurrentFragmentsSingleton.getInstance().instructions;
+                int cookTime = CurrentFragmentsSingleton.getInstance().cookTime;
+
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("ingredients", ingredients);
+                hashMap.put("price", totalPrice);
+                hashMap.put("servings", numServings);
+                hashMap.put("steps", instruction);
+                hashMap.put("time", cookTime);
+
+                dbChildReference.child(name).setValue(hashMap);
+
+            }
+        });
         return view;
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
 }
