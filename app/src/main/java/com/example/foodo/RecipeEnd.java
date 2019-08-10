@@ -35,6 +35,9 @@ public class RecipeEnd extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     DatabaseReference dbRootReference;
     private DatabaseReference dbChildReference;
+    private DatabaseReference dbUserReference;
+    private DatabaseReference dbFavoriteReference;
+    private DatabaseReference dbRecipesReference;
 
     TextView recipeName;
     TextView steps;
@@ -85,7 +88,10 @@ public class RecipeEnd extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         dbRootReference = FirebaseDatabase.getInstance().getReference();
-        dbChildReference = dbRootReference.child("users").child(CurrentFragmentsSingleton.getInstance().user).child("favorites").child("recipes");
+        dbChildReference = dbRootReference.child("users");
+        dbUserReference = dbChildReference.child(CurrentFragmentsSingleton.getInstance().user);
+        dbFavoriteReference = dbUserReference.child("favorites");
+        dbRecipesReference = dbFavoriteReference.child("recipes");
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recipe_end, container, false);
@@ -142,7 +148,7 @@ public class RecipeEnd extends Fragment {
                 hashMap.put("steps", instruction);
                 hashMap.put("time", cookTime);
 
-                dbChildReference.child(name).setValue(hashMap);
+                dbRecipesReference.child(name).setValue(hashMap);
 
             }
         });

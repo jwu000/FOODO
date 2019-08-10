@@ -39,7 +39,6 @@ public class FavoriteRestaurant extends Fragment implements OnMapReadyCallback {
 
     TextView restaurantName;
     TextView address;
-    TextView price;
     MapView map;
 
     public FavoriteRestaurant() {
@@ -81,12 +80,10 @@ public class FavoriteRestaurant extends Fragment implements OnMapReadyCallback {
 
         View view = inflater.inflate(R.layout.fragment_favorite_restaurant, container, false);
         restaurantName = view.findViewById(R.id.favorite_restaurant_name);
-        price = view.findViewById(R.id.favorite_price_dollarsign);
         address = view.findViewById(R.id.favorite_address);
         map = view.findViewById(R.id.favorite_restaurant_map);
 
         restaurantName.setText(restaurantInfo.getString("restaurantName"));
-        price.setText(restaurantInfo.getString("restaurantPrice"));
         address.setText(restaurantInfo.getString("address"));
         Bundle mapViewBundle = null;
         if (savedInstanceState != null) {

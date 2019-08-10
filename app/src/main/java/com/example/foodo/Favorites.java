@@ -46,8 +46,12 @@ public class Favorites extends Fragment {
     private String mParam2;
 
     DatabaseReference dbRootReference;
+    private DatabaseReference dbChildReference;
+    private DatabaseReference dbUserReference;
+    private DatabaseReference dbFavoriteReference;
     private DatabaseReference dbRecipeReference;
     private DatabaseReference dbRestaurantReference;
+
 
     ListView favoriteList;
 
@@ -96,12 +100,13 @@ public class Favorites extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         dbRootReference = FirebaseDatabase.getInstance().getReference();
-        dbRecipeReference = dbRootReference.child("users")
-                .child(CurrentFragmentsSingleton.getInstance().user)
-                .child("favorites").child("recipes");
-        dbRestaurantReference = dbRootReference.child("users")
-                .child(CurrentFragmentsSingleton.getInstance().user)
-                .child("favorites").child("restaurants");
+        dbRootReference = FirebaseDatabase.getInstance().getReference();
+        dbChildReference = dbRootReference.child("users");
+        dbUserReference = dbChildReference.child(CurrentFragmentsSingleton.getInstance().user);
+        dbFavoriteReference = dbUserReference.child("favorites");
+        dbRestaurantReference = dbFavoriteReference.child("restaurants");
+        dbRecipeReference = dbFavoriteReference.child("recipes");
+
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
         favoriteList = view.findViewById(R.id.favorite_list);
 
@@ -204,14 +209,11 @@ public class Favorites extends Fragment {
                     dbRestaurantReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Log.d("tag", dataSnapshot.getKey());
-                            Log.d("tag", dataSnapshot.child(name).getKey());
                             result = (HashMap<String, Object>) dataSnapshot.child(name).getValue();
                             restaurantInfo.putString("restaurantName", name);
                             restaurantInfo.putString("address", (String) result.get("address"));
-                            restaurantInfo.putDouble("longtitude", Double.parseDouble(String.valueOf(result.get("longtitude"))));
+                            restaurantInfo.putDouble("longitude", Double.parseDouble(String.valueOf(result.get("longtitude"))));
                             restaurantInfo.putDouble("latitude", Double.parseDouble(String.valueOf(result.get("latitude"))));
-                            restaurantInfo.putString("restaurantPrice", (String) result.get("price"));
                             nextFragment.setArguments(restaurantInfo);
                             getActivity().getSupportFragmentManager().beginTransaction()
                                     .replace(R.id.fragment_container, nextFragment)

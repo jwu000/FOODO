@@ -74,6 +74,8 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
+                                String[] userDataSplit = emailData.split("@");
+                                CurrentFragmentsSingleton.getInstance().user = userDataSplit[0];
                                 Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
                                 startActivity(logIn);
                             }else{

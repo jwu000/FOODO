@@ -44,6 +44,9 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
 
     DatabaseReference dbRootReference;
     private DatabaseReference dbChildReference;
+    private DatabaseReference dbUserReference;
+    private DatabaseReference dbFavoriteReference;
+    private DatabaseReference dbRestaurantReference;
 
     TextView restaurantName;
     Button restaurant_time;
@@ -88,8 +91,10 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_restaurant_end, container, false);
         dbRootReference = FirebaseDatabase.getInstance().getReference();
-        dbChildReference = dbRootReference.child("users").child(CurrentFragmentsSingleton.getInstance().user)
-                .child("favorites").child("restaurants");
+        dbChildReference = dbRootReference.child("users");
+        dbUserReference = dbChildReference.child(CurrentFragmentsSingleton.getInstance().user);
+        dbFavoriteReference = dbUserReference.child("favorites");
+        dbRestaurantReference = dbFavoriteReference.child("restaurants");
 
         restaurantName = view.findViewById(R.id.restaurant_name_end);
         restaurant_time = view.findViewById(R.id.restaurant_time);
@@ -144,15 +149,13 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
                 String address = CurrentFragmentsSingleton.getInstance().address;
                 double latitude = CurrentFragmentsSingleton.getInstance().latitude;
                 double longtitude = CurrentFragmentsSingleton.getInstance().longtitude;
-                String price = CurrentFragmentsSingleton.getInstance().restaurantPrice;
 
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("address", address);
                 hashMap.put("latitude", latitude);
                 hashMap.put("longtitude", longtitude);
-                hashMap.put("price", price);
 
-                dbChildReference.child(name).setValue(hashMap);
+                dbRestaurantReference.child(name).setValue(hashMap);
             }
         });
         return view;
