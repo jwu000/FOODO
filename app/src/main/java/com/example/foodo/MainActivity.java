@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -32,7 +33,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
 
-
+    BottomNavigationView navView;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -83,9 +84,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //add back_arrow on the toolbar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         loadFragment(new SearchRecipe());
@@ -133,6 +134,27 @@ public class MainActivity extends AppCompatActivity {
             });
 
 
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_bar,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_restart) {
+            Fragment nextFragment = new SearchRecipe();
+            CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+            navView = findViewById(R.id.nav_view);
+            navView.getMenu().getItem(0).setChecked(true);
+            return loadFragment(nextFragment);
+
+        }
+        else {
+            return false;
         }
     }
 
