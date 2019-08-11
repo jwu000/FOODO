@@ -175,4 +175,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() == 0) {
+            return;
+        }
+        super.onBackPressed();
+        /*
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() == 0) {
+            return;
+        }
+        fragmentManager.popBackStack();
+        String currentFragName = fragmentManager
+                .getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1).getName();
+        Fragment newCurrentFrag = fragmentManager.findFragmentByTag(currentFragName);
+        //Log.d("new current frag", newCurrentFrag.toString());
+        CurrentFragmentsSingleton.getInstance().searchState = newCurrentFrag;*/
+
+    }
 }

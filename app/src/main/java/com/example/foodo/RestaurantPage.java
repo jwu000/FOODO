@@ -202,7 +202,7 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
                 Fragment nextFragment = new Comparison();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)
-                        .addToBackStack(null) //allow us to go back kind of maybe
+                        .addToBackStack("selected restaurant") //allow us to go back kind of maybe
                         .commit();
                 CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
             }

@@ -165,7 +165,7 @@ public class Comparison extends Fragment {
                 Fragment nextFragment = new RecipeEnd();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)
-                        .addToBackStack(null) //allow us to go back kind of maybe
+                        .addToBackStack("comparison") //allow us to go back kind of maybe
                         .commit();
                 CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
             }
@@ -177,7 +177,7 @@ public class Comparison extends Fragment {
                 Fragment nextFragment = new RestaurantEnd();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)
-                        .addToBackStack(null) //allow us to go back kind of maybe
+                        .addToBackStack("comparison") //allow us to go back kind of maybe
                         .commit();
                 CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
             }

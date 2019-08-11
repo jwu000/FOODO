@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,12 +114,13 @@ public class RecipeEnd extends Fragment {
             @Override
             public void onClick(View view) {
                 Fragment nextFragment = new SearchRecipe();
-                getActivity().getSupportFragmentManager().beginTransaction()
+                FragmentManager fragManager = getActivity().getSupportFragmentManager();
+                fragManager.beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
                 CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
-
+                //fragManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                 DatabaseReference newHistory = FirebaseDatabase.getInstance().getReference().child("users")
                         .child(CurrentFragmentsSingleton.getInstance().user).child("history").child(String.valueOf(new Date().getTime()));

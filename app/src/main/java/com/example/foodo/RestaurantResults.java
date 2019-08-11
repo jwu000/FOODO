@@ -166,7 +166,7 @@ public class RestaurantResults extends Fragment {
                                         nextFragment.setArguments(restaurantInfo);
                                         getActivity().getSupportFragmentManager().beginTransaction()
                                                 .replace(R.id.fragment_container, nextFragment)
-                                                .addToBackStack(null) //allow us to go back kind of maybe
+                                                .addToBackStack("restaurant results") //allow us to go back kind of maybe
                                                 .commit();
                                         CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
                                     }
@@ -233,7 +233,7 @@ public class RestaurantResults extends Fragment {
                     nextFragment.setArguments(restaurantInfo);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, nextFragment)
-                            .addToBackStack(null) //allow us to go back kind of maybe
+                            .addToBackStack("restaurant results") //allow us to go back kind of maybe
                             .commit();
                     CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
                 }

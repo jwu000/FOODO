@@ -194,7 +194,7 @@ public class RecipeResults extends Fragment {
                     nextFragment.setArguments(recipeInfo);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.fragment_container, nextFragment)
-                            .addToBackStack(null) //allow us to go back kind of maybe
+                            .addToBackStack("recipe results") //allow us to go back kind of maybe
                             .commit();
                     CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
                 }
@@ -340,7 +340,7 @@ public class RecipeResults extends Fragment {
                         nextFragment.setArguments(recipeInfo);
                         getActivity().getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragment_container, nextFragment)
-                                .addToBackStack(null) //allow us to go back kind of maybe
+                                .addToBackStack("recipe results") //allow us to go back kind of maybe
                                 .commit();
                         CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
                     }
