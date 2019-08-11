@@ -175,4 +175,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() == 0) {
+            return;
+        }
+        super.onBackPressed();
+    }
 }
