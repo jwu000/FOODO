@@ -6,10 +6,37 @@
     tools:context=".Settings">
 
     <!-- TODO: Update blank fragment layout -->
+
     <TextView
+        android:layout_marginTop="50dp"
+        android:text="Feedback"
+        android:textSize="30sp"
+        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="40sp"
-        android:layout_gravity="center"
-        android:text="@string/settings" />
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/user_feedback_text"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        android:layout_width="300dp"
+        android:layout_height="100dp" />
+
+    <Button
+        android:id="@+id/submit_feedback_button"
+        android:layout_gravity="center_horizontal"
+        android:text="Submit"
+        android:layout_marginTop="220dp"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="400dp"
+        android:text="LOGOUT"
+        android:textSize="30sp"
+        android:layout_width="200dp"
+        android:layout_height="100dp" />
+
 </FrameLayout>
