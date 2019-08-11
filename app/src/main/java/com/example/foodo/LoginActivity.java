@@ -40,21 +40,26 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                  emailData = email.getText().toString();
-                  passwordData = password.getText().toString();
-                  logIn = new Intent(LoginActivity.this, MainActivity.class);
-                  authenticationRef.signInWithEmailAndPassword(emailData, passwordData).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                      @Override
-                      public void onComplete(@NonNull Task<AuthResult> task) {
-                          if(task.isSuccessful()){
-                              String[] userDataSplit = emailData.split("@");
-                              CurrentFragmentsSingleton.getInstance().user = userDataSplit[0];
-                              startActivity(logIn);
-                          } else {
-                              Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_SHORT).show();
-                          }
-                      }
-                  });
+                emailData = email.getText().toString();
+                passwordData = password.getText().toString();
+                if (emailData == null || passwordData == null || emailData.equals("") || passwordData.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please fill in both email and password", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    logIn = new Intent(LoginActivity.this, MainActivity.class);
+                    authenticationRef.signInWithEmailAndPassword(emailData, passwordData).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                String[] userDataSplit = emailData.split("@");
+                                CurrentFragmentsSingleton.getInstance().user = userDataSplit[0];
+                                startActivity(logIn);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
             }
         });
 

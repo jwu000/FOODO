@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +57,7 @@ public class RecipeResults extends Fragment {
     private String mParam2;
     ListView recipeResults;
     Spinner sort;
-
+    ImageView info;
     ArrayList<RecipeResultAdapterItem> listOfRecipeResults = new ArrayList<>();
     RequestQueue queue;
     AdapterRecipeResults myAdapter;

@@ -6,18 +6,10 @@
     tools:context=".Favorites">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:text="@string/favorite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"/>
 
     <ListView
         android:id="@+id/favorite_list"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="600dp">
 
