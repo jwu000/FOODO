@@ -47,14 +47,7 @@ import util.RecipeResultAdapterItem;
 
 
 public class RecipeResults extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
     ListView recipeResults;
     Spinner sort;
     ImageView info;
@@ -66,31 +59,11 @@ public class RecipeResults extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RecipeResults.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RecipeResults newInstance(String param1, String param2) {
-        RecipeResults fragment = new RecipeResults();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -127,7 +100,7 @@ public class RecipeResults extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d("resquestFAIL", error.getMessage());
+                    Log.d("resquestFAIL", error.toString());
                 }
             }) {
                 @Override
@@ -141,67 +114,73 @@ public class RecipeResults extends Fragment {
             queue.add(jsonRequest);
         }
         else{
-            myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
-            recipeResults.setAdapter(myAdapter);
-            sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    String sortBy =getResources().getStringArray(R.array.sort_dropdown_recipe)[i];
-                    if (sortBy.equals("Price")) {
-                        Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
-                            @Override
-                            public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
-                                return recipeResultAdapterItem.getTotalPrice() > t1.getTotalPrice() ? 1
-                                        : recipeResultAdapterItem.getTotalPrice() < t1.getTotalPrice() ? -1
-                                        : 0;
-                            }
-                        });
-                        myAdapter.notifyDataSetChanged();
-                    }
-                    else if (sortBy.equals("Time")) {
-                        Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
-                            @Override
-                            public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
-                                return recipeResultAdapterItem.getTimeNeeded() > t1.getTimeNeeded() ? 1
-                                        : recipeResultAdapterItem.getTimeNeeded() < t1.getTimeNeeded() ? -1
-                                        : 0;
-                            }
-                        });
-                        myAdapter.notifyDataSetChanged();
-                    }
+            featuresSetup();
 
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-                }
-            });
-
-
-            recipeResults.setOnItemClickListener(new ListView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Fragment nextFragment = new RecipePage();
-                    Bundle recipeInfo = new Bundle();
-                    RecipeResultAdapterItem theRecipe = listOfRecipeResults.get(i);
-                    recipeInfo.putString("recipe_name", theRecipe.getRecipeName());
-                    recipeInfo.putInt("cookTime", theRecipe.getTimeNeeded());
-                    recipeInfo.putString("totalPrice", new DecimalFormat("#.##").format(theRecipe.getTotalPrice()));
-                    recipeInfo.putInt("numServings", theRecipe.getServings());
-                    recipeInfo.putString("pricePerServing", new DecimalFormat("#.##").format(theRecipe.getPricePerServing()));
-                    recipeInfo.putString("instructions", parseInstructions(theRecipe.getInstructions()));
-                    recipeInfo.putString("ingredients", parseIngridents(theRecipe.getIngridents()));
-                    nextFragment.setArguments(recipeInfo);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, nextFragment)
-                            .addToBackStack(null) //allow us to go back kind of maybe
-                            .commit();
-                    CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
-                }
-            });
         }
 
         return v;
+    }
+
+    //sets adpater for list viwe and addeds onclick listenre to list view items and sort drop down
+    public void featuresSetup() {
+        myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
+        recipeResults.setAdapter(myAdapter);
+        sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String sortBy =getResources().getStringArray(R.array.sort_dropdown_recipe)[i];
+                if (sortBy.equals("Price")) {
+                    Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
+                        @Override
+                        public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
+                            return recipeResultAdapterItem.getTotalPrice() > t1.getTotalPrice() ? 1
+                                    : recipeResultAdapterItem.getTotalPrice() < t1.getTotalPrice() ? -1
+                                    : 0;
+                        }
+                    });
+                    myAdapter.notifyDataSetChanged();
+                }
+                else if (sortBy.equals("Time")) {
+                    Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
+                        @Override
+                        public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
+                            return recipeResultAdapterItem.getTimeNeeded() > t1.getTimeNeeded() ? 1
+                                    : recipeResultAdapterItem.getTimeNeeded() < t1.getTimeNeeded() ? -1
+                                    : 0;
+                        }
+                    });
+                    myAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+
+        recipeResults.setOnItemClickListener(new ListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Fragment nextFragment = new RecipePage();
+                Bundle recipeInfo = new Bundle();
+                RecipeResultAdapterItem theRecipe = listOfRecipeResults.get(i);
+                recipeInfo.putString("recipe_name", theRecipe.getRecipeName());
+                recipeInfo.putInt("cookTime", theRecipe.getTimeNeeded());
+                recipeInfo.putString("totalPrice", new DecimalFormat("#.##").format(theRecipe.getTotalPrice()));
+                recipeInfo.putInt("numServings", theRecipe.getServings());
+                recipeInfo.putString("pricePerServing", new DecimalFormat("#.##").format(theRecipe.getPricePerServing()));
+                recipeInfo.putString("instructions", parseInstructions(theRecipe.getInstructions()));
+                recipeInfo.putString("ingredients", parseIngridents(theRecipe.getIngridents()));
+                nextFragment.setArguments(recipeInfo);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, nextFragment)
+                        .addToBackStack(null) //allow us to go back kind of maybe
+                        .commit();
+                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+            }
+        });
     }
 
     private String parseInstructions(JSONArray instructions) {
@@ -289,62 +268,10 @@ public class RecipeResults extends Fragment {
                     }
 
 
-                };
+                }
 
-                myAdapter = new AdapterRecipeResults(getActivity(), listOfRecipeResults);
-                recipeResults.setAdapter(myAdapter);
-                sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                featuresSetup();
 
-                        String sortBy =getResources().getStringArray(R.array.sort_dropdown_recipe)[i];
-                        if (sortBy.equals("Price")) {
-                            Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
-                                @Override
-                                public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
-                                    return Double.valueOf(recipeResultAdapterItem.getTotalPrice()).compareTo(Double.valueOf(t1.getTotalPrice()));
-
-                                }
-                            });
-                            myAdapter.notifyDataSetChanged();
-                        }
-                        else if (sortBy.equals("Time")) {
-                            Collections.sort(listOfRecipeResults, new Comparator<RecipeResultAdapterItem>() {
-                                @Override
-                                public int compare(RecipeResultAdapterItem recipeResultAdapterItem, RecipeResultAdapterItem t1) {
-                                    return Integer.valueOf(recipeResultAdapterItem.getTimeNeeded()).compareTo(Integer.valueOf(t1.getTimeNeeded()));
-                                }
-                            });
-                            myAdapter.notifyDataSetChanged();
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
-                    }
-                });
-
-                recipeResults.setOnItemClickListener(new ListView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Fragment nextFragment = new RecipePage();
-                        Bundle recipeInfo = new Bundle();
-                        RecipeResultAdapterItem theRecipe = listOfRecipeResults.get(i);
-                        recipeInfo.putString("recipe_name", theRecipe.getRecipeName());
-                        recipeInfo.putInt("cookTime", theRecipe.getTimeNeeded());
-                        recipeInfo.putString("totalPrice", new DecimalFormat("#.##").format(theRecipe.getTotalPrice()));
-                        recipeInfo.putInt("numServings", theRecipe.getServings());
-                        recipeInfo.putString("pricePerServing", new DecimalFormat("#.##").format(theRecipe.getPricePerServing()));
-                        recipeInfo.putString("instructions", parseInstructions(theRecipe.getInstructions()));
-                        recipeInfo.putString("ingredients", parseIngridents(theRecipe.getIngridents()));
-                        nextFragment.setArguments(recipeInfo);
-                        getActivity().getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.fragment_container, nextFragment)
-                                .addToBackStack(null) //allow us to go back kind of maybe
-                                .commit();
-                        CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
-                    }
-                });
 
 
             }

@@ -53,8 +53,6 @@ import util.RestaurantResultAdapterItem;
 public class RestaurantResults extends Fragment {
 
     ListView restaurantResults;
-    double longitude = 0.0;
-    double latitude = 0.0;
     Spinner restaurant_sort;
     RequestQueue requestQueue;
     AdapterRestaurantResults  myAdapter;
@@ -73,7 +71,7 @@ public class RestaurantResults extends Fragment {
         final View v = inflater.inflate(R.layout.fragment_restaurant_results, container, false);
 
         requestQueue = Volley.newRequestQueue(getActivity());
-
+        restaurantResults = v.findViewById(R.id.restaurant_results);
         restaurant_sort = (Spinner) v.findViewById(R.id.sort_restaurant);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sort_dropdown_restaurant, android.R.layout.simple_spinner_item);
         restaurant_sort.setAdapter(adapter);
@@ -116,61 +114,7 @@ public class RestaurantResults extends Fragment {
                                     listOfRestaurants.add(restaurantItem);
                                 }
 
-                                restaurantResults = v.findViewById(R.id.restaurant_results);
-                                myAdapter = new AdapterRestaurantResults(getActivity(),listOfRestaurants);
-                                restaurantResults.setAdapter(myAdapter);
-                                restaurant_sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                    @Override
-                                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                                        String sortBy =getResources().getStringArray(R.array.sort_dropdown_restaurant)[i];
-                                        if (sortBy.equals("Price")){
-                                            Collections.sort(listOfRestaurants, new Comparator<RestaurantResultAdapterItem>() {
-                                                @Override
-                                                public int compare(RestaurantResultAdapterItem restaurantResultAdapterItem, RestaurantResultAdapterItem t1) {
-                                                    return restaurantResultAdapterItem.getPrice().compareTo(t1.getPrice());
-
-                                                }
-                                            });
-                                        }
-                                        else if (sortBy.equals("Distance")) {
-                                            Collections.sort(listOfRestaurants, new Comparator<RestaurantResultAdapterItem>() {
-                                                @Override
-                                                public int compare(RestaurantResultAdapterItem restaurantResultAdapterItem, RestaurantResultAdapterItem t1) {
-                                                    return Double.valueOf(restaurantResultAdapterItem.getDistance()).compareTo(Double.valueOf(t1.getDistance()));
-                                                }
-                                            });
-                                        }
-
-                                        myAdapter.notifyDataSetChanged();
-                                    }
-
-                                    @Override
-                                    public void onNothingSelected(AdapterView<?> adapterView) {
-
-                                    }
-                                });
-                                restaurantResults.setOnItemClickListener(new ListView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                        Fragment nextFragment = new RestaurantPage();
-                                        Bundle restaurantInfo = new Bundle();
-                                        RestaurantResultAdapterItem theRestaurant = listOfRestaurants.get(i);
-                                        restaurantInfo.putString("restaurantId", theRestaurant.getRestaurantId());
-                                        restaurantInfo.putString("restaurantName", theRestaurant.getRestaurantName());
-                                        restaurantInfo.putString("restaurantPrice", theRestaurant.getPrice());
-                                        restaurantInfo.putDouble("rating", theRestaurant.getRating());
-                                        restaurantInfo.putString("address", theRestaurant.getAddress());
-                                        restaurantInfo.putString("distance", theRestaurant.getDistance());
-                                        restaurantInfo.putDouble("longitude", theRestaurant.getLongitude());
-                                        restaurantInfo.putDouble("latitude", theRestaurant.getLatitude());
-                                        nextFragment.setArguments(restaurantInfo);
-                                        getActivity().getSupportFragmentManager().beginTransaction()
-                                                .replace(R.id.fragment_container, nextFragment)
-                                                .addToBackStack(null) //allow us to go back kind of maybe
-                                                .commit();
-                                        CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
-                                    }
-                                });
+                                featuresSetup();
 
                             } catch (Exception e) {
                                 Log.d("error", e.toString());
@@ -194,56 +138,60 @@ public class RestaurantResults extends Fragment {
             requestQueue.add(objectRequest);
         }
         else {
-            restaurantResults = v.findViewById(R.id.restaurant_results);
-            myAdapter = new AdapterRestaurantResults(getActivity(),listOfRestaurants);
-            restaurantResults.setAdapter(myAdapter);
-            restaurant_sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    Collections.sort(listOfRestaurants, new Comparator<RestaurantResultAdapterItem>() {
-                        @Override
-                        public int compare(RestaurantResultAdapterItem restaurantResultAdapterItem, RestaurantResultAdapterItem t1) {
-                            return restaurantResultAdapterItem.getPrice().compareTo(t1.getPrice());
-
-                        }
-                    });
-                    myAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-
-                }
-            });
-
-            restaurantResults.setOnItemClickListener(new ListView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Fragment nextFragment = new RestaurantPage();
-                    Bundle restaurantInfo = new Bundle();
-                    RestaurantResultAdapterItem theRestaurant = listOfRestaurants.get(i);
-                    restaurantInfo.putString("restaurantId", theRestaurant.getRestaurantId());
-                    restaurantInfo.putString("restaurantName", theRestaurant.getRestaurantName());
-                    restaurantInfo.putString("restaurantPrice", theRestaurant.getPrice());
-                    restaurantInfo.putDouble("rating", theRestaurant.getRating());
-                    restaurantInfo.putString("address", theRestaurant.getAddress());
-                    restaurantInfo.putString("distance", theRestaurant.getDistance());
-                    restaurantInfo.putDouble("longitude", theRestaurant.getLongitude());
-                    restaurantInfo.putDouble("latitude", theRestaurant.getLatitude());
-                    nextFragment.setArguments(restaurantInfo);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, nextFragment)
-                            .addToBackStack(null) //allow us to go back kind of maybe
-                            .commit();
-                    CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
-                }
-            });
+            featuresSetup();
 
         }
         return v;
 
     }
 
+
+    //set up list view adapter and set on click listener for list items and sort dropdown
+    public void featuresSetup() {
+        myAdapter = new AdapterRestaurantResults(getActivity(),listOfRestaurants);
+        restaurantResults.setAdapter(myAdapter);
+        restaurant_sort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Collections.sort(listOfRestaurants, new Comparator<RestaurantResultAdapterItem>() {
+                    @Override
+                    public int compare(RestaurantResultAdapterItem restaurantResultAdapterItem, RestaurantResultAdapterItem t1) {
+                        return restaurantResultAdapterItem.getPrice().compareTo(t1.getPrice());
+
+                    }
+                });
+                myAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        restaurantResults.setOnItemClickListener(new ListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Fragment nextFragment = new RestaurantPage();
+                Bundle restaurantInfo = new Bundle();
+                RestaurantResultAdapterItem theRestaurant = listOfRestaurants.get(i);
+                restaurantInfo.putString("restaurantId", theRestaurant.getRestaurantId());
+                restaurantInfo.putString("restaurantName", theRestaurant.getRestaurantName());
+                restaurantInfo.putString("restaurantPrice", theRestaurant.getPrice());
+                restaurantInfo.putDouble("rating", theRestaurant.getRating());
+                restaurantInfo.putString("address", theRestaurant.getAddress());
+                restaurantInfo.putString("distance", theRestaurant.getDistance());
+                restaurantInfo.putDouble("longitude", theRestaurant.getLongitude());
+                restaurantInfo.putDouble("latitude", theRestaurant.getLatitude());
+                nextFragment.setArguments(restaurantInfo);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, nextFragment)
+                        .addToBackStack(null) //allow us to go back kind of maybe
+                        .commit();
+                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+            }
+        });
+    }
 
 
 }
