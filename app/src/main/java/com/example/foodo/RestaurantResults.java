@@ -1,16 +1,7 @@
 package com.example.foodo;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -28,14 +19,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.URI;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,7 +37,7 @@ import util.RestaurantResultAdapterItem;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass. fragment to show restaurant serach results
  */
 public class RestaurantResults extends Fragment {
 
@@ -76,14 +65,15 @@ public class RestaurantResults extends Fragment {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.sort_dropdown_restaurant, android.R.layout.simple_spinner_item);
         restaurant_sort.setAdapter(adapter);
 
-        String searchTerm = CurrentFragmentsSingleton.getInstance().searchTerm;
+        String searchTerm = CurrentSessionInfoSingleton.getInstance().searchTerm;
 
-        Log.d("long", String.valueOf(CurrentFragmentsSingleton.getInstance().myLongitude));
-        Log.d("lat", String.valueOf(CurrentFragmentsSingleton.getInstance().myLatitude));
+        Log.d("long", String.valueOf(CurrentSessionInfoSingleton.getInstance().myLongitude));
+        Log.d("lat", String.valueOf(CurrentSessionInfoSingleton.getInstance().myLatitude));
 
         String url = String.format("https://api.yelp.com/v3/businesses/search?term=%s&longitude=%s&latitude=%s&price=1,2,3,4",
-                searchTerm,CurrentFragmentsSingleton.getInstance().myLongitude,CurrentFragmentsSingleton.getInstance().myLatitude);
+                searchTerm, CurrentSessionInfoSingleton.getInstance().myLongitude, CurrentSessionInfoSingleton.getInstance().myLatitude);
 
+        // if already have list of restaurant dont do request again
         if (listOfRestaurants.size() == 0) {
             JsonObjectRequest objectRequest = new JsonObjectRequest(
                     Request.Method.GET, url, null,
@@ -97,6 +87,7 @@ public class RestaurantResults extends Fragment {
                                     Toast.makeText(getActivity().getBaseContext(), "No results. Please go back and search again.", Toast.LENGTH_LONG).show();
                                     return;
                                 }
+                                //get each restaurant info and create adapter item
                                 for (int index = 0; index < results.length(); index++) {
                                     JSONObject restaurant = results.getJSONObject(index);
                                     JSONObject location = restaurant.getJSONObject("location");
@@ -188,7 +179,7 @@ public class RestaurantResults extends Fragment {
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
-                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                CurrentSessionInfoSingleton.getInstance().searchState = nextFragment;
             }
         });
     }

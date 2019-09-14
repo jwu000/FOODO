@@ -6,12 +6,9 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
@@ -21,15 +18,15 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
+/**
+ * main activity that swaps in and out all the fragments of different parts of app
+ */
 public class MainActivity extends AppCompatActivity {
 
 
@@ -37,17 +34,18 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
+        // changes fragment container based on what is selected on bottom nav bar
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             Fragment frag = null;
             switch (item.getItemId()) {
                 case R.id.navigation_search:
-                    if (CurrentFragmentsSingleton.getInstance().searchState == null){
+                    if (CurrentSessionInfoSingleton.getInstance().searchState == null){
                         frag = new SearchRecipe();
-                        CurrentFragmentsSingleton.getInstance().searchState = frag;
+                        CurrentSessionInfoSingleton.getInstance().searchState = frag;
                     }
                     else {
-                        frag = CurrentFragmentsSingleton.getInstance().searchState;
+                        frag = CurrentSessionInfoSingleton.getInstance().searchState;
                     }
                     break;
                 case R.id.navigation_favorite:
@@ -64,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    // changes fragment in hte fragment container
     private Boolean loadFragment(Fragment frag){
         if (frag != null) {
             getSupportFragmentManager()
@@ -94,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        // ask for user location permission until they give
         if ( ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
 
             ActivityCompat.requestPermissions( this, new String[] {  Manifest.permission.ACCESS_FINE_LOCATION  },
@@ -112,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
                     if (location != null) {
                         Log.d("Location Changed", location.getLatitude() + " and " + location.getLongitude());
                         //locationMananger.removeUpdates(this);
-                        CurrentFragmentsSingleton.getInstance().myLongitude = location.getLongitude();
-                        CurrentFragmentsSingleton.getInstance().myLatitude = location.getLatitude();
+                        CurrentSessionInfoSingleton.getInstance().myLongitude = location.getLongitude();
+                        CurrentSessionInfoSingleton.getInstance().myLatitude = location.getLatitude();
                     }
                 }
 
@@ -143,11 +143,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // if menu bar restart button pressed, restart the search compare process
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_restart) {
             Fragment nextFragment = new SearchRecipe();
-            CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+            CurrentSessionInfoSingleton.getInstance().searchState = nextFragment;
             navView = findViewById(R.id.nav_view);
             navView.getMenu().getItem(0).setChecked(true);
             return loadFragment(nextFragment);
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // checks if user gave locaiton permission if not then keep asking
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -176,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // back arrow functionality
     @Override
     public void onBackPressed() {
         FragmentManager fragmentManager = getSupportFragmentManager();

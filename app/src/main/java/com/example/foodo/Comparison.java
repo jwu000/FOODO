@@ -22,24 +22,14 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.Map;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass for comparsion of selected recipe and restaurant
  */
 public class Comparison extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
 
     Button cook;
     Button dine_out;
@@ -56,31 +46,11 @@ public class Comparison extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Comparison.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Comparison newInstance(String param1, String param2) {
-        Comparison fragment = new Comparison();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -100,13 +70,13 @@ public class Comparison extends Fragment {
         cook = view.findViewById(R.id.choose_cook);
         dine_out = view.findViewById(R.id.choose_dine_out);
 
-        recipe_name.setText(CurrentFragmentsSingleton.getInstance().recipeName);
-        recipe_price.setText("Price: " + CurrentFragmentsSingleton.getInstance().totalPrice + " for " + CurrentFragmentsSingleton.getInstance().numServings + " servings");
-        recipe_time.setText("Time: " +CurrentFragmentsSingleton.getInstance().cookTime + " minutes");
-        restaurant_name.setText(CurrentFragmentsSingleton.getInstance().restaurantName);
+        recipe_name.setText(CurrentSessionInfoSingleton.getInstance().recipeName);
+        recipe_price.setText("Price: " + CurrentSessionInfoSingleton.getInstance().totalPrice + " for " + CurrentSessionInfoSingleton.getInstance().numServings + " servings");
+        recipe_time.setText("Time: " + CurrentSessionInfoSingleton.getInstance().cookTime + " minutes");
+        restaurant_name.setText(CurrentSessionInfoSingleton.getInstance().restaurantName);
 
         String priceEstimate;
-        String dollarSigns = CurrentFragmentsSingleton.getInstance().restaurantPrice;
+        String dollarSigns = CurrentSessionInfoSingleton.getInstance().restaurantPrice;
         if (dollarSigns.equals("$")) {
             priceEstimate = "$1-10";
         }
@@ -120,16 +90,15 @@ public class Comparison extends Fragment {
             priceEstimate = "$61+";
         }
         restaurant_price.setText("Price: " + priceEstimate);
-        //restaurant_time.setText(CurrentFragmentsSingleton.getInstance().res);
 
-        double myLatitude = CurrentFragmentsSingleton.getInstance().myLatitude;
-        double myLongitude = CurrentFragmentsSingleton.getInstance().myLongitude;
-        String address = CurrentFragmentsSingleton.getInstance().address.replaceAll("\\s","+");
+        double myLatitude = CurrentSessionInfoSingleton.getInstance().myLatitude;
+        double myLongitude = CurrentSessionInfoSingleton.getInstance().myLongitude;
+        String address = CurrentSessionInfoSingleton.getInstance().address.replaceAll("\\s","+");
         String url = String.format("https://maps.googleapis.com/maps/api/distancematrix/" +
                 "json?origins=%s,%s&destinations=%s&key=%s",myLatitude,myLongitude,address,getString(R.string.google_key));
 
 
-
+        // request to get drive time to resturant
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -167,7 +136,7 @@ public class Comparison extends Fragment {
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
-                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                CurrentSessionInfoSingleton.getInstance().searchState = nextFragment;
             }
         });
 
@@ -179,7 +148,7 @@ public class Comparison extends Fragment {
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
-                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                CurrentSessionInfoSingleton.getInstance().searchState = nextFragment;
             }
         });
         return view;
@@ -202,15 +171,5 @@ public class Comparison extends Fragment {
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
 
 }

@@ -23,12 +23,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import util.AdapterHistory;
 import util.HistoryAdapterItem;
 
-
+/**
+ *  Fragment for user history. Displays in chronological order user's past decisions.
+ */
 public class History extends Fragment {
 
 
@@ -70,43 +71,46 @@ public class History extends Fragment {
             }
         });
 
-        DatabaseReference history = users.child(CurrentFragmentsSingleton.getInstance().user).child("history");
+        DatabaseReference history = users.child(CurrentSessionInfoSingleton.getInstance().user).child("history");
         historyList = v.findViewById(R.id.history_list);
         myAdapter = new AdapterHistory(getActivity(),listHistory);
         historyList.setAdapter(myAdapter);
 
-        history.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Log.d("time", dataSnapshot.getKey());
-                HashMap<String,String> historyData = (HashMap<String,String>)dataSnapshot.getValue();
-                Log.d("name", historyData.get("name"));
-                HistoryAdapterItem historyItem = new HistoryAdapterItem(historyData.get("name"),
-                        historyData.get("type"), dataSnapshot.getKey());
-                listHistory.add(0,historyItem);
-                myAdapter.notifyDataSetChanged();
-            }
+        if (listHistory.size() == 0) {
+            history.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    Log.d("time", dataSnapshot.getKey());
+                    HashMap<String,String> historyData = (HashMap<String,String>)dataSnapshot.getValue();
+                    Log.d("name", historyData.get("name"));
+                    HistoryAdapterItem historyItem = new HistoryAdapterItem(historyData.get("name"),
+                            historyData.get("type"), dataSnapshot.getKey());
+                    listHistory.add(0,historyItem);
+                    myAdapter.notifyDataSetChanged();
+                }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-            }
+                }
 
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-            }
+                }
 
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-            }
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
+
 
 
 
@@ -130,15 +134,6 @@ public class History extends Fragment {
 
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
 
 }

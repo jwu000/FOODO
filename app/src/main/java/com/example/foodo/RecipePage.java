@@ -1,30 +1,21 @@
 package com.example.foodo;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-
+/**
+ * fragment to display recipe info
+ */
 
 public class RecipePage extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     Button yesButton;
     Button noButton;
@@ -38,23 +29,7 @@ public class RecipePage extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RecipePage.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RecipePage newInstance(String param1, String param2) {
-        RecipePage fragment = new RecipePage();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,26 +60,28 @@ public class RecipePage extends Fragment {
         totalPrice.setText("Price: $" + recipeInfo.getString("totalPrice") + " for " + recipeInfo.getInt("numServings") + " servings");
 
 
+        // if want to use this recipe to compare, move on to search fo restaurants
         yesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Pass selected recipe info to currentFragmentsSingleton to keep track info
-                CurrentFragmentsSingleton.getInstance().recipeName = recipeInfo.getString("recipe_name");
-                CurrentFragmentsSingleton.getInstance().cookTime = recipeInfo.getInt("cookTime");
-                CurrentFragmentsSingleton.getInstance().numServings = recipeInfo.getInt("numServings");
-                CurrentFragmentsSingleton.getInstance().totalPrice = recipeInfo.getString("totalPrice");
-                CurrentFragmentsSingleton.getInstance().ingredients = recipeInfo.getString("ingredients");
-                CurrentFragmentsSingleton.getInstance().instructions = recipeInfo.getString("instructions");
+                CurrentSessionInfoSingleton.getInstance().recipeName = recipeInfo.getString("recipe_name");
+                CurrentSessionInfoSingleton.getInstance().cookTime = recipeInfo.getInt("cookTime");
+                CurrentSessionInfoSingleton.getInstance().numServings = recipeInfo.getInt("numServings");
+                CurrentSessionInfoSingleton.getInstance().totalPrice = recipeInfo.getString("totalPrice");
+                CurrentSessionInfoSingleton.getInstance().ingredients = recipeInfo.getString("ingredients");
+                CurrentSessionInfoSingleton.getInstance().instructions = recipeInfo.getString("instructions");
 
                 Fragment nextFragment = new RestaurantResults();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
-                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                CurrentSessionInfoSingleton.getInstance().searchState = nextFragment;
             }
         });
 
+        // if dont want to see, go back to recipe results
         noButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

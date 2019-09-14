@@ -1,10 +1,7 @@
 package com.example.foodo;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.database.CrossProcessCursor;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -44,13 +41,10 @@ import util.ReviewAdapterItem;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass. fragment to display  restauarnt information
  */
 public class RestaurantPage extends Fragment implements OnMapReadyCallback {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
 
 
     TextView restaurantName;
@@ -73,23 +67,6 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RestaurantPage.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RestaurantPage newInstance(String param1, String param2) {
-        RestaurantPage fragment = new RestaurantPage();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -133,6 +110,8 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
         map.onCreate(mapViewBundle);
         map.getMapAsync(this);
 
+        // if already have reviews dont do request again
+        // jsonrequest to get yelp reviews
         if (listOfReviews.size() == 0) {
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                     new Response.Listener<JSONObject>() {
@@ -183,26 +162,28 @@ public class RestaurantPage extends Fragment implements OnMapReadyCallback {
             reviewsList.setAdapter(myAdapter);
         }
 
+        //if want to use this restaurant store it into the singleton and move to next fragment(comparison)
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // pass selected restaurant info into CurrentFragmentsSingleton for track
-                CurrentFragmentsSingleton.getInstance().restaurantName = restaurantInfo.getString("restaurantName");
-                CurrentFragmentsSingleton.getInstance().restaurantPrice = restaurantInfo.getString("restaurantPrice");
-                CurrentFragmentsSingleton.getInstance().rating = restaurantInfo.getDouble("rating");
-                CurrentFragmentsSingleton.getInstance().address = restaurantInfo.getString("address");
-                CurrentFragmentsSingleton.getInstance().distance = restaurantInfo.getString("distance");
-                CurrentFragmentsSingleton.getInstance().latitude = restaurantInfo.getDouble("latitude");
-                CurrentFragmentsSingleton.getInstance().longtitude = restaurantInfo.getDouble("longitude");
+                // pass selected restaurant info into CurrentSessionInfoSingleton for track
+                CurrentSessionInfoSingleton.getInstance().restaurantName = restaurantInfo.getString("restaurantName");
+                CurrentSessionInfoSingleton.getInstance().restaurantPrice = restaurantInfo.getString("restaurantPrice");
+                CurrentSessionInfoSingleton.getInstance().rating = restaurantInfo.getDouble("rating");
+                CurrentSessionInfoSingleton.getInstance().address = restaurantInfo.getString("address");
+                CurrentSessionInfoSingleton.getInstance().distance = restaurantInfo.getString("distance");
+                CurrentSessionInfoSingleton.getInstance().latitude = restaurantInfo.getDouble("latitude");
+                CurrentSessionInfoSingleton.getInstance().longtitude = restaurantInfo.getDouble("longitude");
                 Fragment nextFragment = new Comparison();
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
-                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                CurrentSessionInfoSingleton.getInstance().searchState = nextFragment;
             }
         });
 
+        // if dont want to use go back
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

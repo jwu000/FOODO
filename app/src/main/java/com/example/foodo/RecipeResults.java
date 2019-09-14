@@ -3,7 +3,6 @@ package com.example.foodo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,9 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -34,7 +31,6 @@ import org.json.JSONObject;
 import java.net.URI;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -42,9 +38,9 @@ import java.util.Map;
 import util.AdapterRecipeResults;
 import util.RecipeResultAdapterItem;
 
-import util.AdapterRecipeResults;
-import util.RecipeResultAdapterItem;
-
+/**
+ * Fragment to display recipe search results
+ */
 
 public class RecipeResults extends Fragment {
 
@@ -82,10 +78,11 @@ public class RecipeResults extends Fragment {
 
         Bundle query = getArguments();
 
-        String searchTerm = CurrentFragmentsSingleton.getInstance().searchTerm;
+        String searchTerm = CurrentSessionInfoSingleton.getInstance().searchTerm;
 
         String url = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/search?number=10&offset=0&limitLicense=false&instructionsRequired=true&query=%s", searchTerm);
 
+        // if already have results dont do request again
         if (listOfRecipeResults.size() == 0) {
             JsonObjectRequest jsonRequest = new JsonObjectRequest(Request.Method.GET, url,null, new Response.Listener<JSONObject>() {
                 @Override
@@ -178,11 +175,12 @@ public class RecipeResults extends Fragment {
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
-                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                CurrentSessionInfoSingleton.getInstance().searchState = nextFragment;
             }
         });
     }
 
+    // parses the insturations into a string
     private String parseInstructions(JSONArray instructions) {
         StringBuilder builder = new StringBuilder();
         builder.append("Steps: \n");
@@ -200,6 +198,7 @@ public class RecipeResults extends Fragment {
 
     }
 
+    // parse the ingridents into a string
     private String parseIngridents(JSONArray ingridents) {
         StringBuilder builder = new StringBuilder();
         builder.append("Ingredients: \n");
@@ -216,8 +215,11 @@ public class RecipeResults extends Fragment {
         return builder.toString();
     }
 
+    // create reciperesult adapter items from response from jsonrequest
     public void populateResultsList(JSONArray results, ListView listView) {
         ArrayList<Integer> recipeIds = new ArrayList<>();
+
+        //get recipeIds from given json response results
         for (int index = 0; index < results.length(); index++) {
             JSONObject recipe;
             try{
@@ -244,9 +246,12 @@ public class RecipeResults extends Fragment {
         String recipeIdsSeperatedByComma = builder.toString();
         String urlBulk = String.format("https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/informationBulk?ids=%s",recipeIdsSeperatedByComma);
         Log.d("the request", urlBulk);
+
+        //json request to get info for each recipeId
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, urlBulk, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                //extract each recipe info and create a reciperesultadapter item for listview
                 for (int index =0 ; index < response.length(); index++) {
                     try {
                         JSONObject recipe = (JSONObject)response.get(index);
@@ -270,6 +275,7 @@ public class RecipeResults extends Fragment {
 
                 }
 
+                //set up the list view adapter and add onclick listeneres
                 featuresSetup();
 
 

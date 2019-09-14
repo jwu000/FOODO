@@ -1,7 +1,6 @@
 package com.example.foodo;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 
 
+/**
+ * fragment with search bar for recipes and restaurants
+ */
 public class SearchRecipe extends Fragment {
 
 
@@ -49,12 +51,12 @@ public class SearchRecipe extends Fragment {
                 Bundle passQuery = new Bundle();
                 passQuery.putString("query", s.replaceAll("\\s", "+"));
                 nextFragment.setArguments(passQuery);
-                CurrentFragmentsSingleton.getInstance().searchTerm = s.replaceAll("\\s", "+");
+                CurrentSessionInfoSingleton.getInstance().searchTerm = s.replaceAll("\\s", "+");
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
-                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                CurrentSessionInfoSingleton.getInstance().searchState = nextFragment;
                 return false;
             }
 

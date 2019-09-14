@@ -1,10 +1,8 @@
 package com.example.foodo;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -30,13 +28,9 @@ import java.util.Map;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link Fragment} subclass. fragment for when user chooses to eat out and goto the selected restauarnt
  */
 public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
 
     DatabaseReference dbRootReference;
@@ -55,23 +49,7 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RestaurantEnd.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RestaurantEnd newInstance(String param1, String param2) {
-        RestaurantEnd fragment = new RestaurantEnd();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +63,7 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_restaurant_end, container, false);
         dbRootReference = FirebaseDatabase.getInstance().getReference();
         dbChildReference = dbRootReference.child("users");
-        dbUserReference = dbChildReference.child(CurrentFragmentsSingleton.getInstance().user);
+        dbUserReference = dbChildReference.child(CurrentSessionInfoSingleton.getInstance().user);
         dbFavoriteReference = dbUserReference.child("favorites");
         dbRestaurantReference = dbFavoriteReference.child("restaurants");
 
@@ -114,7 +92,9 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
         });
 
 
-        restaurantName.setText(CurrentFragmentsSingleton.getInstance().restaurantName);
+        restaurantName.setText(CurrentSessionInfoSingleton.getInstance().restaurantName);
+
+        // restarts the process to beginning once user finishes
         restaurant_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,25 +103,26 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
                         .replace(R.id.fragment_container, nextFragment)
                         .addToBackStack(null) //allow us to go back kind of maybe
                         .commit();
-                CurrentFragmentsSingleton.getInstance().searchState = nextFragment;
+                CurrentSessionInfoSingleton.getInstance().searchState = nextFragment;
 
                 DatabaseReference newHistory = FirebaseDatabase.getInstance().getReference().child("users")
-                        .child(CurrentFragmentsSingleton.getInstance().user).child("history").child(String.valueOf(new Date().getTime()));
+                        .child(CurrentSessionInfoSingleton.getInstance().user).child("history").child(String.valueOf(new Date().getTime()));
                 Map<String,String> historyData = new HashMap<String,String>();
                 historyData.put("type", "restaurant");
-                historyData.put("name", CurrentFragmentsSingleton.getInstance().restaurantName);
+                historyData.put("name", CurrentSessionInfoSingleton.getInstance().restaurantName);
                 newHistory.setValue(historyData);
             }
         });
 
+        // addes restauarnt as favorite to database for this user
         add_favorite_restaurant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // save info to favorite db
-                String name = CurrentFragmentsSingleton.getInstance().restaurantName;
-                String address = CurrentFragmentsSingleton.getInstance().address;
-                double latitude = CurrentFragmentsSingleton.getInstance().latitude;
-                double longtitude = CurrentFragmentsSingleton.getInstance().longtitude;
+                String name = CurrentSessionInfoSingleton.getInstance().restaurantName;
+                String address = CurrentSessionInfoSingleton.getInstance().address;
+                double latitude = CurrentSessionInfoSingleton.getInstance().latitude;
+                double longtitude = CurrentSessionInfoSingleton.getInstance().longtitude;
 
                 HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("address", address);
@@ -188,7 +169,7 @@ public class RestaurantEnd extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap mapViewEnd) {
-        LatLng theRestaurant = new LatLng(CurrentFragmentsSingleton.getInstance().latitude, CurrentFragmentsSingleton.getInstance().longtitude);
+        LatLng theRestaurant = new LatLng(CurrentSessionInfoSingleton.getInstance().latitude, CurrentSessionInfoSingleton.getInstance().longtitude);
         mapViewEnd.addMarker(new MarkerOptions().position(theRestaurant).title("Marker"));
         if (getActivity().checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && getActivity().checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling

@@ -11,6 +11,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ * activity for map when we want to show user full map location of chosen restaurant
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -39,8 +42,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        LatLng current = new LatLng(CurrentFragmentsSingleton.getInstance().latitude, CurrentFragmentsSingleton.getInstance().longtitude);
-        mMap.addMarker(new MarkerOptions().position(current).title(CurrentFragmentsSingleton.getInstance().restaurantName));
+        LatLng current = new LatLng(CurrentSessionInfoSingleton.getInstance().latitude, CurrentSessionInfoSingleton.getInstance().longtitude);
+        mMap.addMarker(new MarkerOptions().position(current).title(CurrentSessionInfoSingleton.getInstance().restaurantName));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(current));
     }
 }

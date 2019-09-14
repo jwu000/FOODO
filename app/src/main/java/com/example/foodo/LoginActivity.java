@@ -2,8 +2,6 @@ package com.example.foodo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,9 +14,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
+/**
+ *  activity for log in screen. also allows user to create account here
+ */
 public class LoginActivity extends AppCompatActivity {
     private Button loginButton, signupButton;
     private EditText email, password;
@@ -52,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 String[] userDataSplit = emailData.split("@");
-                                CurrentFragmentsSingleton.getInstance().user = userDataSplit[0];
+                                CurrentSessionInfoSingleton.getInstance().user = userDataSplit[0];
                                 startActivity(logIn);
                             } else {
                                 Toast.makeText(getApplicationContext(), "Login Failed", Toast.LENGTH_SHORT).show();
@@ -80,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 String[] userDataSplit = emailData.split("@");
-                                CurrentFragmentsSingleton.getInstance().user = userDataSplit[0];
+                                CurrentSessionInfoSingleton.getInstance().user = userDataSplit[0];
                                 Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
                                 startActivity(logIn);
                             }else{
