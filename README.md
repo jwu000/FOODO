@@ -1,6 +1,10 @@
 # FOODO
 
-Mobile app to help users decide if they should eat out or cook at home. Allows users to compare recipes they find and nearby restaurants. Users will be provided with information such as distance, time, price, and rating. Users can save favorite restaurants and recipes and view past decisions. Powered by Yelp API and Spoonacular API. Created by Javis Wu and Yi Hou.
+Mobile app to help users decide if they should eat out or cook at home. Allows users to compare recipes they find and nearby restaurants. Users will be provided with information such as distance, time, price, and rating. Users can save favorite restaurants and recipes and view past decisions. 
+
+Powered by Yelp API and Spoonacular API. 
+
+Created by Javis Wu and Yi Hou.
 
 ## Instructions to run locally
 1. Git clone the repo
