@@ -1,13 +1,12 @@
 package util;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.foodo.R;
+import com.foodoapp.foodo.R;
 
 import java.util.ArrayList;
 

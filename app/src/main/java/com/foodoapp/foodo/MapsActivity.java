@@ -1,4 +1,4 @@
-package com.example.foodo;
+package com.foodoapp.foodo;
 
 import androidx.fragment.app.FragmentActivity;
 

@@ -6,9 +6,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.foodo.R;
-
-import org.w3c.dom.Text;
+import com.foodoapp.foodo.R;
 
 import java.util.ArrayList;
 

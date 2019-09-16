@@ -1,4 +1,4 @@
-package com.example.foodo;
+package com.foodoapp.foodo;
 
 import android.Manifest;
 import android.content.Context;

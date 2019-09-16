@@ -1,9 +1,7 @@
-package com.example.foodo;
+package com.foodoapp.foodo;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,9 +17,6 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
-
-
-import java.text.DecimalFormat;
 
 
 /**
