@@ -24,4 +24,5 @@ For Google be sure to make a project and enable the Distance Matrix API and Maps
     <string name="google_key"></string>
 </resources>
 ```
-5. Press the run button at the top of Android Studio
+5. Setup a Firebase project and follow the instructions. 
+6. Press the run button at the top of Android Studio
