@@ -6,6 +6,8 @@ Powered by Yelp API and Spoonacular API.
 
 Created by Javis Wu and Yi Hou.
 
+Currently on the app store as a beta release. https://play.google.com/store/apps/details?id=com.foodoapp.foodo
+
 ## Instructions to run locally
 1. Git clone the repo
 2. Open the project in Android Studio
