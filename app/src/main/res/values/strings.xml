@@ -96,4 +96,5 @@
     </string-array>
     <string name="title_activity_maps">Map</string>
     <string name="direction">Get direction</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>
