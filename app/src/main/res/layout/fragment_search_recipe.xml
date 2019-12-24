@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,17 +11,61 @@
         android:id="@+id/search_query"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="124dp"
         android:text="@string/search_query"
         android:textSize="24sp"
-        android:layout_marginTop="250dp"
-        android:layout_gravity="center_horizontal"/>
+        app:layout_constraintEnd_toEndOf="@id/rightGuideSearch"
+
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@id/leftGuideSearch"
+        app:layout_constraintTop_toBottomOf="@id/topGuideSearch" />
 
     <SearchView
         android:id="@+id/search_input"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:queryHint="@string/search_recipe" />
+        android:layout_marginTop="48dp"
+        android:queryHint="@string/search_recipe"
+        app:layout_constraintBottom_toTopOf="@id/botGuideSearch"
+        app:layout_constraintEnd_toEndOf="@id/rightGuideSearch"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="@id/leftGuideSearch"
+        app:layout_constraintTop_toBottomOf="@+id/search_query"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/topGuideSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/botGuideSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="200dp"
+        app:layout_constraintGuide_percent="1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftGuideSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp"
+        app:layout_constraintGuide_percent="0" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightGuideSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="1"
+        app:layout_constraintGuide_begin="20dp" />
 
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
