@@ -1,10 +1,12 @@
 package com.foodoapp.foodo;
 
+import android.graphics.Point;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +69,7 @@ public class RecipeResults extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_recipe_results, container, false);
+
         recipeResults = v.findViewById(R.id.recipe_results);
         // set array of items on dropdown
         sort = (Spinner) v.findViewById(R.id.sort);
